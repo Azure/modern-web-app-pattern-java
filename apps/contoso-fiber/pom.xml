@@ -3,24 +3,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.2</version>
-		<relativePath />
-		<!-- lookup parent from repository -->
-	</parent>
+
+    <parent>
+        <groupId>com.contoso.cams</groupId>
+        <artifactId>modern-web-app-pattern-java</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
 	<groupId>com.contoso</groupId>
 	<artifactId>cams</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cams</name>
 	<description>Customer Account Management System</description>
-
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud-azure.version>5.5.0</spring-cloud-azure.version>
-		<spring-cloud.version>2022.0.4</spring-cloud.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
@@ -116,31 +111,39 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
-		</dependency> 
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+		<dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-servicebus</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-stream-binder-servicebus</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.contoso.cams</groupId>
+			<artifactId>proto</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>com.azure.spring</groupId>
-				<artifactId>spring-cloud-azure-dependencies</artifactId>
-				<version>${spring-cloud-azure.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-        		<groupId>org.springframework.cloud</groupId>
-        		<artifactId>spring-cloud-dependencies</artifactId>
-        		<version>${spring-cloud.version}</version>
-        		<type>pom</type>
-        		<scope>import</scope>
-      		</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

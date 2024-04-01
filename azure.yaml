@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: modern-java-web
+metadata:
+  template: modern-java-web@1.1.0
+infra:
+    provider: "terraform"
+    path: "./infra/dev/terraform"
+services:
+  application:
+    project: ./apps/contoso-fiber
+    language: java
+    host: appservice

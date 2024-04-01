@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package email.v1;
+
+option java_multiple_files = true;
+option java_outer_classname = "EmailProto";
+option java_package = "com.contoso.cams.protobuf.email.v1";
+
+message EmailRequest {
+  string email_address = 1;
+  string url_to_manual = 2;
+  int64 request_id = 3;
+}
+
+message EmailResponse {
+  string email_address = 1;
+  string url_to_manual = 2;
+  Status status = 3;
+  enum Status {
+        SUCCESS = 0;
+        FAILURE = 1;
+  }
+  string message = 4;
+  int64 request_id = 5;
+}

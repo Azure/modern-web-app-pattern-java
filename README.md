@@ -1,14 +1,79 @@
-# Project
+# Modern Java Web App Patterns
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+## Introduction
 
-As the maintainer of this project, please make a few updates:
+This repository contains a collection of patterns and best practices for building modern Java web applications. The patterns are designed to be used with the [Spring Framework](https://spring.io/) and [Azure](https://azure.microsoft.com/), but can be adapted to other frameworks and cloud providers.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+
+## Prerequisites
+
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [Azure Dev CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-mac)
+- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+- [jq](https://stedolan.github.io/jq/download/)
+- [Java 17](https://adoptopenjdk.net/)
+- [Maven 3.9.1](https://maven.apache.org/download.cgi)
+- [Protoc](https://grpc.io/docs/protoc-installation/)
+
+## Login to Azure
+
+Before deploying, you must be authenticated to Azure and have the appropriate subscription selected. Run the following command to authenticate:
+
+```shell
+az login --scope https://graph.microsoft.com//.default
+```
+
+Set the subscription to the one you want to use (you can use [az account list](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list) to list available subscriptions):
+
+```shell
+export AZURE_SUBSCRIPTION_ID="<your-subscription-id>"
+```
+
+```pwsh
+az account set --subscription $AZURE_SUBSCRIPTION_ID
+```
+
+Use the next command to login with the Azure Dev CLI (AZD) tool:
+
+```pwsh
+azd auth login
+```
+
+## Create a new environment
+
+Next we provide the AZD tool with variables that it uses to create the deployment. The first thing we initialize is the AZD environment with a name.
+
+The environment name should be less than 18 characters and must be comprised of lower-case, numeric, and dash characters (for example, `contosowebapp`).  The environment name is used for resource group naming and specific resource naming.
+
+```shell
+azd env new <pick_a_name>
+```
+
+Enable the AZD Terraform provider:
+
+```shell
+azd config set alpha.terraform on
+```
+
+Select the subscription that will be used for the deployment:
+
+```shell
+azd env set AZURE_SUBSCRIPTION_ID $AZURE_SUBSCRIPTION_ID
+```
+
+Set the Azure region to be used:
+
+```shell
+azd env set AZURE_LOCATION <pick_a_region>
+```
+
+## Create the Azure resources and deploy the code
+
+Run the following command to create the Azure resources and deploy the code (about 15-minutes to complete):
+
+```shell
+azd up
+```
 
 ## Contributing
 
