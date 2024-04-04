@@ -21,7 +21,7 @@
     <modules>
         <module>apps/proto</module>
         <module>apps/contoso-fiber</module>
-		<module>apps/email-processor</module>
+        <module>apps/email-processor</module>
     </modules>
 
     <properties>
