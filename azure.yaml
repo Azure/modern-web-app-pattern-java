@@ -11,3 +11,11 @@ services:
     project: ./apps/contoso-fiber
     language: java
     host: appservice
+  email-processor:
+    project: ./apps/email-processor
+    language: java
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      buildArgs:
+        - "JAR_FILE=target/email-processor.jar"

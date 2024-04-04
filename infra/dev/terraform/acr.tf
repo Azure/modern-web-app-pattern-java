@@ -6,11 +6,10 @@ resource "azurerm_container_registry" "acr" {
   sku = "Premium"
 
   admin_enabled                 = false
-  public_network_access_enabled = false
+  public_network_access_enabled = true
   network_rule_bypass_option    = "AzureServices"
 
   network_rule_set {
-    default_action             = "Deny"
     ip_rule {
       action = "Allow"
       ip_range  = local.mynetwork
@@ -22,6 +21,18 @@ resource "azurerm_role_assignment" "container_app_acr_pull" {
   principal_id                     = azurerm_container_app.container_app.identity[0].principal_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.acr.id
+}
+
+resource "azurerm_user_assigned_identity" "container_registry_user_assigned_identity" {
+  name                = "ContainerRegistryUserAssignedIdentity"
+  resource_group_name = azurerm_resource_group.dev.name
+  location            = var.location
+}
+
+resource "azurerm_role_assignment" "container_registry_user_assigned_identity_acr_pull" {
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.container_registry_user_assigned_identity.principal_id
 }
 
 

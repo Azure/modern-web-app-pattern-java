@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CamsApplication",
+            "request": "launch",
+            "mainClass": "com.contoso.cams.CamsApplication",
+            "projectName": "cams",
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "local"
+            }
+        },
+        {
+            "type": "java",
+            "name": "EmailProcessor",
+            "request": "launch",
+            "mainClass": "com.contoso.cams.emailprocessor.EmailProcessorApplication",
+            "projectName": "email-processor",
+            "env": {
+                "AZURE_SERVICEBUS_NAMESPACE": "",
+                "AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME": "",
+                "AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME": ""
+            }
+        }
+    ]
+}

@@ -26,3 +26,8 @@ output "acr_login_server" {
   value = azurerm_container_registry.acr.login_server
   description = "The Azure Container Registry Login Server."
 }
+
+output "AZURE_CONTAINER_REGISTRY_ENDPOINT" {
+  value = azurerm_container_registry.acr.login_server
+  description = "The Azure Container Registry Endpoint."
+}

@@ -75,6 +75,14 @@ Run the following command to create the Azure resources and deploy the code (abo
 azd up
 ```
 
+## Tear down the deployment
+
+Run the following command to tear down the deployment:
+
+```
+azd down --purge --force
+```
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
