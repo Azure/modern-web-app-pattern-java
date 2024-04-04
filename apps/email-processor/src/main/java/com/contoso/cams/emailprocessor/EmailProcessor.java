@@ -15,27 +15,27 @@ public class EmailProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(EmailProcessor.class);
 
-	@Bean
+    @Bean
     Function<String, String> consume() {
         return message -> {
- 
-			log.info("New message received");
 
-			try {
-				EmailRequest emailRequest = EmailRequest.parseFrom(message.getBytes());
-				log.info("EmailRequest: {}", emailRequest);
+            log.info("New message received");
 
-				EmailResponse emailResponse = EmailResponse.newBuilder()
-						.setEmailAddress(emailRequest.getEmailAddress())
-						.setUrlToManual(emailRequest.getUrlToManual())
-						.setStatus(Status.SUCCESS)
-						.build();
+            try {
+                EmailRequest emailRequest = EmailRequest.parseFrom(message.getBytes());
+                log.info("EmailRequest: {}", emailRequest);
+
+                EmailResponse emailResponse = EmailResponse.newBuilder()
+                        .setEmailAddress(emailRequest.getEmailAddress())
+                        .setUrlToManual(emailRequest.getUrlToManual())
+                        .setStatus(Status.SUCCESS)
+                        .build();
 
                 return emailResponse.toString();
 
-			} catch (InvalidProtocolBufferException e) {
-				throw new RuntimeException("Error parsing email request message", e);
-			}
+            } catch (InvalidProtocolBufferException e) {
+                throw new RuntimeException("Error parsing email request message", e);
+            }
         };
     }
 }
