@@ -21,9 +21,9 @@ variable "location" {
 
 variable "contoso_webapp_options" {
   type = object({
-    contoso_active_directory_tenant_id      = string
-    contoso_active_directory_client_id      = string
-    contoso_active_directory_client_secret  = string
+    active_directory_tenant_id      = string
+    active_directory_client_id      = string
+    active_directory_client_secret  = string
 
     postgresql_database_url       = string
     postgresql_database_user      = string

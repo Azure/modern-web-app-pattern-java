@@ -103,8 +103,8 @@ resource "azuread_application_password" "application_password" {
   end_date_relative = "4320h"
 }
 
-# This is not guidance and is done for demo purposes. The resource below will add the 
-# "L1Support", "AccountManager", and "BusinessOwner" app role assignment for the application 
+# This is not guidance and is done for demo purposes. The resource below will add the
+# "L1Support", "AccountManager", and "BusinessOwner" app role assignment for the application
 # of the current user deploying this sample.
 resource "azuread_app_role_assignment" "application_role_current_user" {
   app_role_id         = azuread_service_principal.application_service_principal.app_role_ids["AccountManager"]
@@ -181,25 +181,25 @@ resource "azurerm_linux_web_app" "application" {
   }
 
   app_settings = {
-    SPRING_DATASOURCE_URL      = var.contoso_webapp_options.postgresql_database_url
-    SPRING_DATASOURCE_USERNAME = var.contoso_webapp_options.postgresql_database_user
-    SPRING_DATASOURCE_PASSWORD = var.contoso_webapp_options.postgresql_database_password
+    DATABASE_URL      = var.contoso_webapp_options.postgresql_database_url
+    DATABASE_USERNAME = var.contoso_webapp_options.postgresql_database_user
+    DATABASE_PASSWORD = var.contoso_webapp_options.postgresql_database_password
 
-    SPRING_CLOUD_AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID     = var.contoso_webapp_options.contoso_active_directory_client_id
-    SPRING_CLOUD_AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET = var.contoso_webapp_options.contoso_active_directory_client_secret
-    SPRING_CLOUD_AZURE_ACTIVE_DIRECTORY_PROFILE_TENANT_ID        = var.contoso_webapp_options.contoso_active_directory_tenant_id
+    AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID     = var.contoso_webapp_options.active_directory_client_id
+    AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET = var.contoso_webapp_options.active_directory_client_secret
+    AZURE_ACTIVE_DIRECTORY_PROFILE_TENANT_ID        = var.contoso_webapp_options.active_directory_tenant_id
 
-    SPRING_DATA_REDIS_HOST = var.contoso_webapp_options.redis_host_name
-    SPRING_DATA_REDIS_PORT = var.contoso_webapp_options.redis_port
-    SPRING_DATA_REDIS_PASSWORD = var.contoso_webapp_options.redis_password
+    REDIS_HOST = var.contoso_webapp_options.redis_host_name
+    REDIS_PORT = var.contoso_webapp_options.redis_port
+    REDIS_PASSWORD = var.contoso_webapp_options.redis_password
 
-    SPRING_CLOUD_AZURE_SERVICEBUS_NAMESPACE = var.contoso_webapp_options.service_bus_namespace
-    SPRING_CLOUD_AZURE_SERVICEBUS_ENTITY_NAME = var.contoso_webapp_options.service_bus_entity_name
-    SPRING_CLOUD_AZURE_SERVICEBUS_ENTITY_TYPE = var.contoso_webapp_options.service_bus_entity_type
+    AZURE_SERVICEBUS_NAMESPACE = var.contoso_webapp_options.service_bus_namespace
+    AZURE_SERVICEBUS_ENTITY_NAME = var.contoso_webapp_options.service_bus_entity_name
+    AZURE_SERVICEBUS_ENTITY_TYPE = var.contoso_webapp_options.service_bus_entity_type
 
     CONTOSO_RETRY_DEMO = "0"
 
-    CONTOSO_CAMS_GUIDE_REQUEST_SERVICE="email"
+    CONTOSO_GUIDE_REQUEST_SERVICE="email"
   }
 
   logs {

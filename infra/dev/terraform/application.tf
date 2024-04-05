@@ -6,9 +6,9 @@ module "dev_application" {
   location                       = var.location
 
   contoso_webapp_options = {
-    contoso_active_directory_tenant_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_tenant_id.id})"
-    contoso_active_directory_client_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_id.id})"
-    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_secret.id})"
+    active_directory_tenant_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_tenant_id.id})"
+    active_directory_client_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_id.id})"
+    active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_secret.id})"
     postgresql_database_url                = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_database_url.id})"
     postgresql_database_user               = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_database_admin.id})"
     postgresql_database_password           = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_database_admin_password.id})"

@@ -17,7 +17,18 @@
             "mainClass": "com.contoso.cams.CamsApplication",
             "projectName": "cams",
             "env": {
-                "SPRING_PROFILES_ACTIVE": "local"
+                "DATABASE_URL": "",
+                "DATABASE_USERNAME": "",
+                "DATABASE_PASSWORD": "",
+                "REDIS_HOST": "",
+                "REDIS_PORT": "",
+                "REDIS_PASSWORD": "",
+                "AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID": "",
+                "AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET": "",
+                "AZURE_ACTIVE_DIRECTORY_CREDENTIAL_TENANT_ID": "",
+                "AZURE_SERVICEBUS_NAMESPACE": "",
+                "AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME": "",
+                "AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME": ""
             }
         },
         {
