@@ -1,0 +1,53 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<head>
+    <link th:href=@{/vendor/bootstrap-table/bootstrap-table.min.css} rel="stylesheet" /> 
+</head>
+<body>
+    <section class="container-fluid" layout:fragment="content">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Support Guides</h1>
+        </div>
+    
+        <!--<div id="toolbar">
+            <a id="addGuide" class="btn btn-primary" th:href=@{~/guides/new}>
+                <i class="fa fa-plus"></i> Add New Guide
+            </a>
+        </div>-->
+        <table 
+            id="guidesTable" 
+            data-toggle="table"
+            data-toolbar="#toolbar" 
+            data-pagination="true"
+            data-sortable="true"
+            data-classes="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th data-field="id" data-sortable="true">ID</th>
+                    <th data-field="name" data-sortable="true">Name</th>
+                    <th data-field="description" data-sortable="true">Description</th>
+                    <th data-field="url" data-sortable="false">URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="guide : ${guides}">
+                  <td th:text="${guide.id}"></td>
+                  <td th:text="${guide.name}"></td>
+                  <td th:text="${guide.description}"></td>
+                  <td th:text="${guide.url}"></td>
+                </tr>
+              </tbody>
+        </table>
+    </section>
+
+    
+    <section class="d-none" layout:fragment="javascript">
+        <script th:src=@{/vendor/bootstrap-table/bootstrap-table.min.js}></script>
+        <script th:inline="javascript">
+        </script>
+    </section>
+    
+</body>
+</html>
+
+                

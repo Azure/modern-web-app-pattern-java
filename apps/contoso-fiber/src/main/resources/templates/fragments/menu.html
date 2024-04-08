@@ -53,4 +53,10 @@
             <span>Service Plans</span>
         </a>
     </li>
+    <li th:class="${#execInfo.templateNames[0] == 'pages/plans/list'} ? @{nav-item active} : @{nav-item}">
+        <a class="nav-link" th:href=@{~/guides/list}>
+            <i class="fas fa-fw fa-shapes"></i>
+            <span>Support Guides</span>
+        </a>
+    </li>
 </div>
