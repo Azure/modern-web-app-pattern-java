@@ -37,7 +37,7 @@ resource "azurerm_postgresql_flexible_server" "dev_postresql_database" {
   }
 }
 
-resource "azurerm_postgresql_flexible_server_firewall_rule" "dev_postresql_database_allow_access_rule" {
+resource "azurerm_postgresql_flexible_server_firewall_rule" "allow-access-from-azure-services" {
   name             = "allow-access-from-azure-services"
   server_id        = azurerm_postgresql_flexible_server.dev_postresql_database.id
   start_ip_address = "0.0.0.0"

@@ -24,3 +24,10 @@ resource "azurerm_postgresql_flexible_server_database" "dev_postresql_database_d
   name      = "${var.application_name}db"
   server_id = module.dev_postresql_database.dev_database_server_id
 }
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "dev_postresql_database_allow_access_rule" {
+  name             = "allow-access-from-my-ip"
+  server_id        = module.dev_postresql_database.dev_database_server_id
+  start_ip_address = local.myip
+  end_ip_address   = local.myip
+}

@@ -84,8 +84,7 @@ resource "azuread_application" "app_registration" {
   web {
     homepage_url  = "https://${azurecaf_name.app_service.result}"
     logout_url    = "https://${azurecaf_name.app_service.result}/logout"
-    redirect_uris = ["https://${azurecaf_name.app_service.result}.azurewebsites.net/login/oauth2/code/", "https://localhost:8080/login/oauth2/code/"]
-    #redirect_uris = ["https://localhost:8080/login/oauth2/code/"]
+    redirect_uris = ["https://${azurecaf_name.app_service.result}.azurewebsites.net/login/oauth2/code/", "https://localhost:8080/login/oauth2/code/", "http://localhost:8080/login/oauth2/code/"]
     implicit_grant {
       id_token_issuance_enabled     = true
     }
@@ -187,7 +186,7 @@ resource "azurerm_linux_web_app" "application" {
 
     AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID     = var.contoso_webapp_options.active_directory_client_id
     AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET = var.contoso_webapp_options.active_directory_client_secret
-    AZURE_ACTIVE_DIRECTORY_PROFILE_TENANT_ID        = var.contoso_webapp_options.active_directory_tenant_id
+    AZURE_ACTIVE_DIRECTORY_TENANT_ID                = var.contoso_webapp_options.active_directory_tenant_id
 
     REDIS_HOST = var.contoso_webapp_options.redis_host_name
     REDIS_PORT = var.contoso_webapp_options.redis_port

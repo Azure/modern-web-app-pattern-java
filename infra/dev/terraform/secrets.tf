@@ -1,4 +1,4 @@
- 
+
 locals {
   contoso_tenant_id     = data.azuread_client_config.current.tenant_id
   dev_contoso_client_id = module.dev_application.application_registration_id
@@ -14,7 +14,7 @@ resource azurerm_role_assignment dev_kv_administrator_user_role_assignement {
 
 resource "azurerm_key_vault_secret" "dev_contoso_database_url" {
   name         = "contoso-database-url"
-  value        = "jdbc:postgresql://${module.dev_postresql_database.dev_database_fqdn}:5432/${azurerm_postgresql_flexible_server_database.dev_postresql_database_db.name}"
+  value        = "jdbc:postgresql://${module.dev_postresql_database.dev_database_fqdn}:5432/${azurerm_postgresql_flexible_server_database.dev_postresql_database_db.name}?sslmode=require"
   key_vault_id = module.dev_key_vault.vault_id
   depends_on = [
     azurerm_role_assignment.dev_kv_administrator_user_role_assignement
