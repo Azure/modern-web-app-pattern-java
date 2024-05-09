@@ -49,12 +49,6 @@ The environment name should be less than 18 characters and must be comprised of 
 azd env new <pick_a_name>
 ```
 
-Enable the AZD Terraform provider:
-
-```shell
-azd config set alpha.terraform on
-```
-
 Select the subscription that will be used for the deployment:
 
 ```shell

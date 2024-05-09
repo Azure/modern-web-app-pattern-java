@@ -198,7 +198,7 @@ resource "azurerm_linux_web_app" "application" {
 
     CONTOSO_RETRY_DEMO = "0"
 
-    CONTOSO_GUIDE_REQUEST_SERVICE="email"
+    CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE="email"
   }
 
   logs {
