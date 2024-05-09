@@ -63,5 +63,4 @@ public class ServicePlanController {
             return "pages/plans/notfound";
         }
     }
-
 }
