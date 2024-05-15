@@ -2,18 +2,19 @@ package com.contoso.cams.support;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.stream.function.StreamBridge;
 
-import com.azure.messaging.servicebus.ServiceBusMessage;
-import com.azure.messaging.servicebus.ServiceBusSenderClient;
 import com.contoso.cams.protobuf.email.v1.EmailRequest;
 
 public class SupportGuideQueueSender implements SupportGuideSender {
 
     private static final Logger log = LoggerFactory.getLogger(SupportGuideDemoQueueSender.class);
-    private final ServiceBusSenderClient serviceBusSenderClient;
+    private static final String EMAIL_REQUEST_QUEUE = "produceemailrequest-out-0";
 
-    public SupportGuideQueueSender(ServiceBusSenderClient serviceBusSenderClient) {
-        this.serviceBusSenderClient = serviceBusSenderClient;
+    private final StreamBridge streamBridge;
+
+    public SupportGuideQueueSender(StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class SupportGuideQueueSender implements SupportGuideSender {
 
         log.info("EmailRequest: {}", emailRequest);
 
-        serviceBusSenderClient.sendMessage(new ServiceBusMessage(emailRequest.toByteArray()));
+        streamBridge.send(EMAIL_REQUEST_QUEUE, emailRequest);
 
         log.info("Message sent to the queue");
     }

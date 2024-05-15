@@ -31,8 +31,8 @@
         <os.maven.plugin.version>1.7.1</os.maven.plugin.version>
         <version.spring.boot>3.2.3</version.spring.boot>
         <commons-lang3.version>3.14.0</commons-lang3.version>
-        <spring-cloud-azure.version>5.10.0</spring-cloud-azure.version>
-		<spring-cloud.version>2023.0.0</spring-cloud.version>
+        <spring-cloud-azure.version>5.12.0</spring-cloud-azure.version>
+		<spring-cloud.version>2023.0.1</spring-cloud.version>
     </properties>
 
     <dependencyManagement>

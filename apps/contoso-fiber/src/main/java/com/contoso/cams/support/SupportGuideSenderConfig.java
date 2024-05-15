@@ -1,19 +1,17 @@
 package com.contoso.cams.support;
 
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.azure.messaging.servicebus.ServiceBusSenderClient;
 
 @Configuration
 public class SupportGuideSenderConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "contoso.suport-guide.request", name = "service", havingValue = "queue")
-    SupportGuideSender supportGuideQueueSender(ServiceBusSenderClient serviceBusSenderClient) {
-        return new SupportGuideQueueSender(serviceBusSenderClient);
+    SupportGuideSender supportGuideQueueSender(StreamBridge streamBridge) {
+        return new SupportGuideQueueSender(streamBridge);
     }
 
     @Bean
@@ -24,7 +22,7 @@ public class SupportGuideSenderConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "contoso.suport-guide.request", name = "service", havingValue = "demo")
-    SupportGuideSender supportGuideDemoQueueSender(ServiceBusSenderClient serviceBusSenderClient) {
-        return new SupportGuideDemoQueueSender(serviceBusSenderClient);
+    SupportGuideSender supportGuideDemoQueueSender(StreamBridge streamBridge) {
+        return new SupportGuideDemoQueueSender(streamBridge);
     }
 }
