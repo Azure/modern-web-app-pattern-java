@@ -107,6 +107,9 @@
                 <button id="addActivityButton" class="btn btn-primary" data-toggle="modal" data-target="#newActivityModal">
                     <i class="fa fa-plus"></i> Add Activity
                 </button>
+                <button id="emailCustomerButton" class="btn btn-primary" data-toggle="modal" data-target="#newEmailCustomerModal">
+                    <i class="fa fa-plus"></i> Email Customer
+                </button>
             </div>
             <table
                 id="activityLogTable"
@@ -133,6 +136,36 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Modal for sending email.-->
+        <div class="modal fade" id="newEmailCustomerModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="newEmailCustomerModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="newEmailCustomerForm" method="POST" th:action=@{~/support/email/guide} th:object=${caseDetails.emailGuideRequest}>
+                        <input type="hidden" name="caseId" th:value="*{caseId}" />
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Email Customer</h1>
+                            <button type="button" class="close email-customer-cancel" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body row">
+                            <div class="col-12">
+                                <label class="form-label mt-2 mb-0">Pick a Guide</label>
+                                <select id="guideId" name="guideId" class="form-control">
+                                    <option th:each="guide : ${guides}" th:value="${guide.id}" th:text="${guide.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary email-customer-cancel" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i>Email Guide</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Modal for adding a note.-->
@@ -211,6 +244,10 @@
                 // When the close or cancel button is used in the modal, reset the text area and radio buttons.
                 $('button.new-activity-cancel').on('click', (evt) => {
                     $('#newActivityForm').trigger('reset');
+                });
+
+                $('button.email-customer-cancel').on('click', (evt) => {
+                    $('#newEmailCustomerForm').trigger('reset');
                 });
             });
         </script>

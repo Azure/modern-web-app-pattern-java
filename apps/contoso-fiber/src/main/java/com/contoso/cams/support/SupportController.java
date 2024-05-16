@@ -56,6 +56,7 @@ public class SupportController {
         UserInfo userInfo = userDetailService.getUserInfo();
         model.addAttribute("caseDetails", supportCaseDetails);
         model.addAttribute("userInfo", userInfo);
+        model.addAttribute("guides", supportCaseService.getAllSupportGuides());
         return "pages/support/details";
     }
 
@@ -108,5 +109,14 @@ public class SupportController {
 
         model.addAttribute("supportCases", supportCases);
         return "pages/support/queue";
+    }
+
+    @PostMapping(value = "/email/guide", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PreAuthorize("hasAnyAuthority('APPROLE_L1Support', 'APPROLE_L2Support', 'APPROLE_FieldService')")
+    public String emailGuide(Model model, EmailGuideRequest newEmailGuidRequest) {
+        log.info("Emailing the customer: case id {} guide id {}", newEmailGuidRequest.caseId(), newEmailGuidRequest.guideId());
+
+        supportCaseService.emailGuide(newEmailGuidRequest.caseId(), newEmailGuidRequest.guideId());
+        return "redirect:/support/details?id=" + newEmailGuidRequest.caseId();
     }
 }

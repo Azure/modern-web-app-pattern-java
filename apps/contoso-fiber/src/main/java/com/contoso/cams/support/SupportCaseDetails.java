@@ -26,5 +26,7 @@ public class SupportCaseDetails {
 
     private List<SupportCaseActivityDto> activities;
 
+    private EmailGuideRequest emailGuideRequest;
+
     private String assignee;
 }

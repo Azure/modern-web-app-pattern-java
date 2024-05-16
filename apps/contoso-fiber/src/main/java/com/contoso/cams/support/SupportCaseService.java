@@ -17,17 +17,23 @@ import com.contoso.cams.model.SupportCaseActivity;
 import com.contoso.cams.model.SupportCaseActivityRepository;
 import com.contoso.cams.model.SupportCaseQueue;
 import com.contoso.cams.model.SupportCaseRepository;
+import com.contoso.cams.model.SupportGuide;
+import com.contoso.cams.model.SupportGuideRepository;
 import com.contoso.cams.security.UserInfo;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class SupportCaseService {
 
     private final AccountRepository accountRepository;
     private final SupportCaseRepository supportCaseRepository;
     private final SupportCaseActivityRepository supportCaseActivityRepository;
+    private final SupportGuideRepository supportGuideRepository;
+    private final SupportGuideSender supportGuideSender;
 
     public NewSupportCaseRequest generateNewSupportCaseRequest(Long accountId) {
 
@@ -79,19 +85,32 @@ public class SupportCaseService {
         SupportCaseDetails supportCaseDetails = createFrom(supportCase.get());
 
         List<SupportCaseActivityDto> activityDtos = supportCase.get().getActivities().stream()
-                                                        .map(a -> {
-                                                            var dto = new SupportCaseActivityDto();
-                                                            dto.setId(a.getId());
-                                                            dto.setActivityType(a.getActivityType());
-                                                            dto.setNotes(a.getNotes());
-                                                            dto.setTimestamp(a.getTimestamp());
-                                                            return dto;
-                                                        })
-                                                        .collect(Collectors.toList());
+            .map(a -> {
+                var dto = new SupportCaseActivityDto();
+                dto.setId(a.getId());
+                dto.setActivityType(a.getActivityType());
+                dto.setNotes(a.getNotes());
+                dto.setTimestamp(a.getTimestamp());
+                return dto;
+            })
+            .collect(Collectors.toList());
 
         supportCaseDetails.setActivities(activityDtos);
 
+        List<SupportGuide> supportGuides = supportGuideRepository.findAll();
+        List<SupportGuideDto> supportGuideDtos = supportGuides.stream()
+            .map(g -> new SupportGuideDto(g.getId(), g.getName()))
+            .collect(Collectors.toList());
+
+        EmailGuideRequest emailGuideRequest = new EmailGuideRequest(id, null, supportGuideDtos);
+
+        supportCaseDetails.setEmailGuideRequest(emailGuideRequest);
+
         return supportCaseDetails;
+    }
+
+    public List<SupportGuide> getAllSupportGuides() {
+        return supportGuideRepository.findAll();
     }
 
     public void createSupportCaseActivity(NewSupportCaseActivityRequest newSupportCaseActivityRequest) {
@@ -105,6 +124,10 @@ public class SupportCaseService {
         supportCaseActivity.setActivityType(newSupportCaseActivityRequest.activityType());
         supportCaseActivity.setSupportCase(supportCase.get());
 
+        addNewSupportCaseActivity(supportCaseActivity);
+    }
+
+    private void addNewSupportCaseActivity(SupportCaseActivity supportCaseActivity) {
         supportCaseActivityRepository.save(supportCaseActivity);
     }
 
@@ -174,5 +197,39 @@ public class SupportCaseService {
         supportCaseDetails.setCustomerPhoneNumber(customer.getPhoneNumber());
 
         return supportCaseDetails;
+    }
+
+    public void emailGuide(Long id, Long guideId) {
+        Optional<SupportCase> supportCase = supportCaseRepository.findById(id);
+        if (supportCase.isEmpty()) {
+            throw new IllegalArgumentException("Support case with id " + id + " does not exist.");
+        }
+
+        Optional<SupportGuide> supportGuide = supportGuideRepository.findById(guideId);
+        if (supportGuide.isEmpty()) {
+            throw new IllegalArgumentException("Support guide with id " + guideId + " does not exist.");
+        }
+
+        SupportCaseActivity activity = createEmailSupportCaseActivity(supportCase.get(), supportGuide.get());//(new NewSupportCaseActivityRequest(id, "Emailed support guide " + supportGuide.get().getName(), ActivityType.OUTBOUND_EMAIL)
+        sendEmailMessage(supportCase.get(), supportGuide.get(), activity.getId());
+    }
+
+    private SupportCaseActivity createEmailSupportCaseActivity(SupportCase supportCase, SupportGuide supportGuide) {
+        final String notes = "Emailing support guide " + supportGuide.getName();
+        final ActivityType activityType = ActivityType.OUTBOUND_EMAIL;
+
+        SupportCaseActivity supportCaseActivity = new SupportCaseActivity();
+        supportCaseActivity.setNotes(notes);
+        supportCaseActivity.setActivityType(activityType);
+        supportCaseActivity.setSupportCase(supportCase);
+
+        addNewSupportCaseActivity(supportCaseActivity);
+        return supportCaseActivity;
+    }
+
+    private void sendEmailMessage(SupportCase supportCase, SupportGuide supportGuide, Long activityId) {
+        Customer customer = supportCase.getAccount().getCustomer();
+        supportGuideSender.send(customer.getEmailAddress(), supportGuide.getUrl(), activityId);
+        log.info("Sending email to customer {} {} for support case {} with guide {}", customer.getFirstName(), customer.getLastName(), supportCase.getId(), supportGuide.getId());
     }
 }
