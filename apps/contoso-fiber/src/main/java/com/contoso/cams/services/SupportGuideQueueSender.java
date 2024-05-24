@@ -27,7 +27,7 @@ public class SupportGuideQueueSender implements SupportGuideSender {
 
         log.info("EmailRequest: {}", emailRequest);
 
-        var message = emailRequest.toString();
+        var message = emailRequest.toByteArray();
         streamBridge.send(EMAIL_REQUEST_QUEUE, message);
 
         log.info("Message sent to the queue");

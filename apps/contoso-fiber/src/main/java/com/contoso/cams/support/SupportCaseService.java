@@ -210,11 +210,11 @@ public class SupportCaseService {
             throw new IllegalArgumentException("Support guide with id " + guideId + " does not exist.");
         }
 
-        SupportCaseActivity activity = createEmailSupportCaseActivity(supportCase.get(), supportGuide.get());
-        sendEmailMessage(supportCase.get(), supportGuide.get(), activity.getId());
+        createEmailSupportCaseActivity(supportCase.get(), supportGuide.get());
+        sendEmailMessage(supportCase.get(), supportGuide.get(), supportCase.get().getId());
     }
 
-    private SupportCaseActivity createEmailSupportCaseActivity(SupportCase supportCase, SupportGuide supportGuide) {
+    private void createEmailSupportCaseActivity(SupportCase supportCase, SupportGuide supportGuide) {
         final String notes = "Emailing support guide " + supportGuide.getName();
         final ActivityType activityType = ActivityType.OUTBOUND_EMAIL;
 
@@ -224,7 +224,6 @@ public class SupportCaseService {
         supportCaseActivity.setSupportCase(supportCase);
 
         addNewSupportCaseActivity(supportCaseActivity);
-        return supportCaseActivity;
     }
 
     private void sendEmailMessage(SupportCase supportCase, SupportGuide supportGuide, Long activityId) {

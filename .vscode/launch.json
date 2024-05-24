@@ -28,7 +28,8 @@
                 "AZURE_ACTIVE_DIRECTORY_CREDENTIAL_TENANT_ID": "",
                 "AZURE_SERVICEBUS_NAMESPACE": "",
                 "AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME": "",
-                "AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME": ""
+                "AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME": "",
+                "CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE": ""
             }
         },
         {
