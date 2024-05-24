@@ -1,4 +1,4 @@
-package com.contoso.cams.support;
+package com.contoso.cams.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,5 +11,4 @@ public class SupportGuideEmailSender implements SupportGuideSender {
     public void send(String to, String guideUrl, Long requestId) {
         log.info("Sending guide to {} with url {} by email for request id {}", to, guideUrl, requestId);
     }
-
 }

@@ -20,6 +20,7 @@ import com.contoso.cams.model.SupportCaseRepository;
 import com.contoso.cams.model.SupportGuide;
 import com.contoso.cams.model.SupportGuideRepository;
 import com.contoso.cams.security.UserInfo;
+import com.contoso.cams.services.SupportGuideSender;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +69,6 @@ public class SupportCaseService {
         SupportCaseActivity supportCaseActivity = new SupportCaseActivity();
         supportCaseActivity.setNotes("New support case created");
         supportCaseActivity.setActivityType(ActivityType.NOTE);
-        //supportCase.addActivity(supportCaseActivity);
 
         supportCaseActivity.setSupportCase(supportCase);
 
@@ -210,7 +210,7 @@ public class SupportCaseService {
             throw new IllegalArgumentException("Support guide with id " + guideId + " does not exist.");
         }
 
-        SupportCaseActivity activity = createEmailSupportCaseActivity(supportCase.get(), supportGuide.get());//(new NewSupportCaseActivityRequest(id, "Emailed support guide " + supportGuide.get().getName(), ActivityType.OUTBOUND_EMAIL)
+        SupportCaseActivity activity = createEmailSupportCaseActivity(supportCase.get(), supportGuide.get());
         sendEmailMessage(supportCase.get(), supportGuide.get(), activity.getId());
     }
 
