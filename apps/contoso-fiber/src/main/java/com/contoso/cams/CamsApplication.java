@@ -19,8 +19,6 @@ import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 @EnableCaching
 public class CamsApplication {
 
-    private static final Logger log = LoggerFactory.getLogger(CamsApplication.class);
-
 	public static void main(String[] args) {
 		SpringApplication.run(CamsApplication.class, args);
 	}
