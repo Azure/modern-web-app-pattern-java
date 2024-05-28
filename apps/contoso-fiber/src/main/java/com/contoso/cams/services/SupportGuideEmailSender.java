@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class SupportGuideEmailSender implements SupportGuideSender {
 
-    private static final Logger log = LoggerFactory.getLogger(SupportGuideDemoQueueSender.class);
+    private static final Logger log = LoggerFactory.getLogger(SupportGuideQueueLoadDemo.class);
 
     @Override
     public void send(String to, String guideUrl, Long requestId) {

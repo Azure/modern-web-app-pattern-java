@@ -5,7 +5,8 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.contoso.cams.services.SupportGuideDemoQueueSender;
+import com.contoso.cams.services.SupportGuideQueueLoadDemo;
+import com.contoso.cams.services.SuportGuideDeadLetterDemo;
 import com.contoso.cams.services.SupportGuideEmailSender;
 import com.contoso.cams.services.SupportGuideQueueSender;
 import com.contoso.cams.services.SupportGuideSender;
@@ -26,8 +27,14 @@ public class SupportGuideSenderConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "contoso.suport-guide.request", name = "service", havingValue = "demo")
-    SupportGuideSender supportGuideDemoQueueSender(StreamBridge streamBridge) {
-        return new SupportGuideDemoQueueSender(streamBridge);
+    @ConditionalOnProperty(prefix = "contoso.suport-guide.request", name = "service", havingValue = "demo-load")
+    SupportGuideSender supportGuideQueueLoadDemo(StreamBridge streamBridge) {
+        return new SupportGuideQueueLoadDemo(streamBridge);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "contoso.suport-guide.request", name = "service", havingValue = "demo-dead-letter")
+    SupportGuideSender suportGuideDeadLetterDemo(StreamBridge streamBridge) {
+        return new SuportGuideDeadLetterDemo(streamBridge);
     }
 }

@@ -33,9 +33,9 @@ variable "contoso_webapp_options" {
     redis_port                    = number
     redis_password                = string
 
-    service_bus_namespace         = string
-    service_bus_entity_name       = string
-    service_bus_entity_type       = string
+    service_bus_namespace               = string
+    service_bus_email_request_queue     = string
+    service_bus_email_response_queue    = string
   })
 
   description = "The options for the webapp"

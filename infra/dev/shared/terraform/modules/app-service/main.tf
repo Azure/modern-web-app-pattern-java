@@ -192,9 +192,9 @@ resource "azurerm_linux_web_app" "application" {
     REDIS_PORT = var.contoso_webapp_options.redis_port
     REDIS_PASSWORD = var.contoso_webapp_options.redis_password
 
-    AZURE_SERVICEBUS_NAMESPACE = var.contoso_webapp_options.service_bus_namespace
-    AZURE_SERVICEBUS_ENTITY_NAME = var.contoso_webapp_options.service_bus_entity_name
-    AZURE_SERVICEBUS_ENTITY_TYPE = var.contoso_webapp_options.service_bus_entity_type
+    AZURE_SERVICEBUS_NAMESPACE                  = var.contoso_webapp_options.service_bus_namespace
+    AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME   = var.contoso_webapp_options.service_bus_email_request_queue
+    AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME  = var.contoso_webapp_options.service_bus_email_response_queue
 
     CONTOSO_RETRY_DEMO = "0"
 
