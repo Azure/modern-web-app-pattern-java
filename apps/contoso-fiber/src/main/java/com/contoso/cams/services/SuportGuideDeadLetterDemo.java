@@ -6,7 +6,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 
 public class SuportGuideDeadLetterDemo implements SupportGuideSender {
 
-    private static final Logger log = LoggerFactory.getLogger(SupportGuideQueueLoadDemo.class);
+    private static final Logger log = LoggerFactory.getLogger(SuportGuideDeadLetterDemo.class);
     private static final String EMAIL_REQUEST_QUEUE = "produceemailrequest-out-0";
 
     private final StreamBridge streamBridge;
