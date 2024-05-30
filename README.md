@@ -61,6 +61,12 @@ Set the Azure region to be used:
 azd env set AZURE_LOCATION <pick_a_region>
 ```
 
+Optional: Set the App Registration Service management reference:
+
+```shell
+azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <service_management_reference>
+```
+
 ## Create the Azure resources and deploy the code
 
 Run the following command to create the Azure resources and deploy the code (about 15-minutes to complete):
