@@ -19,6 +19,12 @@ variable "location" {
   description = "The Azure region where all resources in this example should be created"
 }
 
+variable "service_management_reference" {
+  type = string
+  description = "value for the service management reference"
+  default = null
+}
+
 variable "contoso_webapp_options" {
   type = object({
     active_directory_tenant_id      = string

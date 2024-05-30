@@ -89,6 +89,8 @@ resource "azuread_application" "app_registration" {
       id_token_issuance_enabled     = true
     }
   }
+
+  service_management_reference = var.service_management_reference
 }
 
 resource "azuread_service_principal" "application_service_principal" {

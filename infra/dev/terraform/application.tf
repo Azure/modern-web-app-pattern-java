@@ -19,4 +19,6 @@ module "dev_application" {
     service_bus_email_request_queue        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_email_request_queue.id})"
     service_bus_email_response_queue       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_email_response_queue.id})"
   }
+
+  service_management_reference = var.service_management_reference
 }
