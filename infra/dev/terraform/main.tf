@@ -1,4 +1,8 @@
 provider "azurerm" {
+  # by default teraform uses the shared access key to access the storage account.
+  # to have terraform, use azure ad instead, set this property to true
+  storage_use_azuread = true
+
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
