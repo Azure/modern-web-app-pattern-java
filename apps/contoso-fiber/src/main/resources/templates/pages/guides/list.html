@@ -1,6 +1,6 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
 <head>
-    <link th:href=@{/vendor/bootstrap-table/bootstrap-table.min.css} rel="stylesheet" /> 
+    <link th:href=@{/vendor/bootstrap-table/bootstrap-table.min.css} rel="stylesheet" />
 </head>
 <body>
     <section class="container-fluid" layout:fragment="content">
@@ -8,16 +8,16 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Support Guides</h1>
         </div>
-    
-        <!--<div id="toolbar">
-            <a id="addGuide" class="btn btn-primary" th:href=@{~/guides/new}>
-                <i class="fa fa-plus"></i> Add New Guide
+
+        <div id="toolbar">
+            <a id="addGuide" class="btn btn-primary" th:href=@{~/guides/upload}>
+                <i class="fa fa-plus"></i> Upload New Guide
             </a>
-        </div>-->
-        <table 
-            id="guidesTable" 
+        </div>
+        <table
+            id="guidesTable"
             data-toggle="table"
-            data-toolbar="#toolbar" 
+            data-toolbar="#toolbar"
             data-pagination="true"
             data-sortable="true"
             data-classes="table table-bordered table-hover table-striped">
@@ -40,14 +40,13 @@
         </table>
     </section>
 
-    
+
     <section class="d-none" layout:fragment="javascript">
         <script th:src=@{/vendor/bootstrap-table/bootstrap-table.min.js}></script>
         <script th:inline="javascript">
         </script>
     </section>
-    
+
 </body>
 </html>
 
-                
