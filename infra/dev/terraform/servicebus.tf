@@ -12,7 +12,7 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
 
   # Should be set to false, but we need it for Keda scaling rules
   # https://github.com/microsoft/azure-container-apps/issues/592
-  local_auth_enabled  = true
+  local_auth_enabled  = false
 
   zone_redundant      = false
 
