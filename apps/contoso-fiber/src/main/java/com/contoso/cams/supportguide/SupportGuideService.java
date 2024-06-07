@@ -14,6 +14,7 @@ import org.springframework.core.io.WritableResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import com.contoso.cams.model.SupportGuide;
 import com.contoso.cams.model.SupportGuideRepository;
 
 import lombok.AllArgsConstructor;
@@ -42,7 +43,21 @@ public class SupportGuideService {
             .collect(Collectors.toList());
     }
 
-    public void uploadGuide(String fileName, InputStreamSource guideInputStream) throws IOException {
+    public void uploadGuide(UploadSupportGuideRequest uploadFormData) throws IOException {
+        final String fileName = uploadFormData.file.getOriginalFilename();
+        final String description = uploadFormData.getDescription();
+        final InputStreamSource guideInputStream = uploadFormData.getFile();
+
+        // verify that the file is not empty
+        if (uploadFormData.file.getSize() <= 0) {
+            throw new IllegalArgumentException("The file is empty");
+        }
+
+        // Verify that the file name is unique
+        if (guideRepository.findByName(fileName).isPresent()) {
+            throw new IllegalArgumentException("A guide with the same name already exists");
+        }
+
         var location = String.format(BLOB_RESOURCE_PATTERN, blobContainerName, fileName);
         log.info("Saving guide: {} to {}", fileName, location);
 
@@ -52,6 +67,11 @@ public class SupportGuideService {
             FileCopyUtils.copy(inputStream, outputStream);
         }
 
-        //guideRepository.save(guide.toEntity());
+        SupportGuide guide = new SupportGuide();
+        guide.setName(fileName);
+        guide.setDescription(description);
+        guide.setUrl(location);
+
+        guideRepository.save(guide);
     }
 }

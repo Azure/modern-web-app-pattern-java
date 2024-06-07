@@ -11,18 +11,24 @@
 
     <!-- Basic Account Information -->
     <div class="container border rounded-3">
-      <form id="uploadGuideForm" class="form-group" method="POST" th:action=@{~/guides/upload} enctype="multipart/form-data">
+      <form id="uploadGuideForm" class="form-group" method="POST" th:action=@{~/guides/upload} th:object="${uploadSupportGuide}" enctype="multipart/form-data">
+        <div class="row py-2">
+            <div class="col-md-6  form-group">
+                <label>Description</label>
+                <input type="text" id="guideDescription" name="description" th:field="*{description}" class="form-control" placeholder="Description">
+            </div>
+        </div>
         <div class="row py-2">
             <div class="col-md-6">
-                <input type="file" name="guide" accept=".pdf" class="form-control-file">
+                <input type="file" name="guide" accept=".pdf" class="form-control-file" th:field="*{file}">
             </div>
         </div>
         <div class="row py-2">
             <div class="d-flex flex-row mb-2">
-            <button type="submit" class="btn btn-primary mx-2" id="uploadGuideFormSubmit">
-                <i class="fas fa-check-circle"></i>
-                Upload Guide
-            </button>
+                <button type="submit" class="btn btn-primary mx-2" id="uploadGuideFormSubmit">
+                    <i class="fas fa-check-circle"></i>
+                    Upload Guide
+                </button>
             </div>
         </div>
       </form>

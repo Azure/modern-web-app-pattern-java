@@ -14,11 +14,11 @@ import lombok.Data;
 public class SupportGuide {
 
     @Id
-    @Column(name = "activity_type_id", nullable = false, updatable = false)
+    @Column(name = "support_guide_id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "description", nullable = false)
