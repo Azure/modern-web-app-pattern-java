@@ -29,7 +29,9 @@
                 "AZURE_SERVICEBUS_NAMESPACE": "",
                 "AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME": "",
                 "AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME": "",
-                "CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE": ""
+                "CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE": "",
+                "AZURE_STORAGE_ACCOUNT_NAME": "",
+                "AZURE_STORAGE_CONTAINER_NAME": ""
             }
         },
         {

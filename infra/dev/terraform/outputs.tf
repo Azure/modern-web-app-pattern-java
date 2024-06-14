@@ -27,6 +27,16 @@ output "acr_login_server" {
   description = "The Azure Container Registry Login Server."
 }
 
+output "azure_storage_account" {
+  value       = azurerm_storage_account.sa.name
+  description = "Azure Storage account name."
+}
+
+output "storage_container_name" {
+  value       = azurerm_storage_container.container.name
+  description = "Azure Storage container name."
+}
+
 output "AZURE_CONTAINER_REGISTRY_ENDPOINT" {
   value = azurerm_container_registry.acr.login_server
   description = "The Azure Container Registry Endpoint."

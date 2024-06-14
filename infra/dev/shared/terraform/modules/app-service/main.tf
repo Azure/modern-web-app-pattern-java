@@ -198,6 +198,9 @@ resource "azurerm_linux_web_app" "application" {
     AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME   = var.contoso_webapp_options.service_bus_email_request_queue
     AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME  = var.contoso_webapp_options.service_bus_email_response_queue
 
+    AZURE_STORAGE_ACCOUNT_NAME = var.contoso_webapp_options.storage_account_name
+    AZURE_STORAGE_CONTAINER_NAME = var.contoso_webapp_options.storage_container_name
+
     CONTOSO_RETRY_DEMO = "0"
 
     CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE="email"

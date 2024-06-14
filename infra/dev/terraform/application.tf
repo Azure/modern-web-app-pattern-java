@@ -18,7 +18,11 @@ module "dev_application" {
     service_bus_namespace                  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_servicebus_namespace.id})"
     service_bus_email_request_queue        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_email_request_queue.id})"
     service_bus_email_response_queue       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_email_response_queue.id})"
+
+    storage_account_name                   = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_storage_account.id})"
+    storage_container_name                 = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_storage_container_name.id})"
   }
 
   service_management_reference = var.service_management_reference
 }
+

@@ -45,6 +45,19 @@ resource "azurerm_role_assignment" "storage_container_app_data_contributor" {
   principal_id         = module.dev_application.application_principal_id
 }
 
+resource "azurerm_role_assignment" "app_storage_blob_data_owner" {
+  scope                = azurerm_storage_account.sa.id
+  role_definition_name = "Storage Blob Data Owner"
+  principal_id         = module.dev_application.application_principal_id
+}
+
+
+resource "azurerm_role_assignment" "app_storage_blob_contributor" {
+  scope                = azurerm_storage_account.sa.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = module.dev_application.application_principal_id
+}
+
 resource "azurecaf_name" "app_storage_container" {
   name          = "supportguides"
   resource_type = "azurerm_storage_container"

@@ -42,6 +42,9 @@ variable "contoso_webapp_options" {
     service_bus_namespace               = string
     service_bus_email_request_queue     = string
     service_bus_email_response_queue    = string
+
+    storage_account_name          = string
+    storage_container_name        = string
   })
 
   description = "The options for the webapp"

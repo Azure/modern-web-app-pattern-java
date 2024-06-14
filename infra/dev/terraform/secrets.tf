@@ -104,9 +104,20 @@ resource "azurerm_key_vault_secret" "contoso_email_response_queue" {
   ]
 }
 
-# Give the app access to the key vault secrets - https://learn.microsoft.com/azure/key-vault/general/rbac-guide?tabs=azure-cli#secret-scope-role-assignment
-resource azurerm_role_assignment dev_app_keyvault_role_assignment {
-  scope                 = module.dev_key_vault.vault_id
-  role_definition_name  = "Key Vault Secrets User"
-  principal_id          = module.dev_application.application_principal_id
+resource "azurerm_key_vault_secret" "contoso_storage_account" {
+  name         = "contoso-storage-account"
+  value        = azurerm_storage_account.sa.name
+  key_vault_id = module.dev_key_vault.vault_id
+  depends_on = [
+    azurerm_role_assignment.dev_kv_administrator_user_role_assignement
+  ]
+}
+
+resource "azurerm_key_vault_secret" "contoso_storage_container_name" {
+  name         = "contoso-storage-container-name"
+  value        = azurerm_storage_container.container.name
+  key_vault_id = module.dev_key_vault.vault_id
+  depends_on = [
+    azurerm_role_assignment.dev_kv_administrator_user_role_assignement
+  ]
 }
