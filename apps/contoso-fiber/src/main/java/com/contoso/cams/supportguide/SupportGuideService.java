@@ -49,7 +49,7 @@ public class SupportGuideService {
         final InputStreamSource guideInputStream = uploadFormData.getFile();
 
         // verify that the file is not empty
-        if (uploadFormData.file.getSize() <= 0) {
+        if (uploadFormData.file.isEmpty() == true) {
             throw new IllegalArgumentException("The file is empty");
         }
 
@@ -62,10 +62,9 @@ public class SupportGuideService {
         log.info("Saving guide: {} to {}", fileName, location);
 
         Resource resource = resourceLoader.getResource(location);
-        try (OutputStream outputStream = ((WritableResource) resource).getOutputStream();
-             InputStream inputStream = guideInputStream.getInputStream()) {
-            FileCopyUtils.copy(inputStream, outputStream);
-        }
+        OutputStream outputStream = ((WritableResource) resource).getOutputStream();
+        InputStream inputStream = guideInputStream.getInputStream();
+        FileCopyUtils.copy(inputStream, outputStream);
 
         SupportGuide guide = new SupportGuide();
         guide.setName(fileName);

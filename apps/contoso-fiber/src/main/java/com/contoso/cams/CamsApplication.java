@@ -33,9 +33,16 @@ public class CamsApplication {
         private static final Logger log = LoggerFactory.getLogger(ExceptionHandlerControllerAdvice.class);
 
         @ExceptionHandler(AccessDeniedException.class)
-        public ProblemDetail exceptionHandler(Exception ex) {
+        public ProblemDetail exceptionHandler(AccessDeniedException ex) {
             log.error("Access Denied error", ex);
             ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "You do not have permission to access this resource.");
+            return pd;
+        }
+
+        @ExceptionHandler(Exception.class)
+        public ProblemDetail allExceptionHandler(Exception ex) {
+            log.error("Exception", ex);
+            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return pd;
         }
     }
