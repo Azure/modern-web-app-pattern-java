@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "sa" {
 resource "azurerm_storage_account_network_rules" "cams-storage-network-rules" {
   storage_account_id = azurerm_storage_account.sa.id
 
-  default_action             = "Deny"
+  default_action             = "Allow"
   ip_rules                   = [local.mynetwork]
   bypass                     = ["AzureServices"]
 }
