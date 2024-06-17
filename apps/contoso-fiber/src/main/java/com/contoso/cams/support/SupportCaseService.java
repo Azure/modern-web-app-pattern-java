@@ -215,7 +215,7 @@ public class SupportCaseService {
     }
 
     private void createEmailSupportCaseActivity(SupportCase supportCase, SupportGuide supportGuide) {
-        final String notes = "Emailing support guide " + supportGuide.getName();
+        final String notes = "Emailing support guide " + supportGuide.getUrl();
         final ActivityType activityType = ActivityType.OUTBOUND_EMAIL;
 
         SupportCaseActivity supportCaseActivity = new SupportCaseActivity();
