@@ -69,7 +69,7 @@ public class SupportGuideService {
         SupportGuide guide = new SupportGuide();
         guide.setName(fileName);
         guide.setDescription(description);
-        guide.setUrl(location);
+        guide.setUrl(resource.getURL().toString());
 
         guideRepository.save(guide);
     }
