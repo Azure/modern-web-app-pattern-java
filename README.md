@@ -67,6 +67,14 @@ Optional: Set the App Registration Service management reference:
 azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <service_management_reference>
 ```
 
+## Build the applications
+
+Run the following command to build the applications:
+
+```shell
+./mvnw clean package
+```
+
 ## Create the Azure resources and deploy the code
 
 Run the following command to create the Azure resources and deploy the code (about 15-minutes to complete):
