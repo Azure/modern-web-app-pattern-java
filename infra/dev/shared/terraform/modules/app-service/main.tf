@@ -101,7 +101,7 @@ resource "azuread_service_principal" "application_service_principal" {
 
 resource "azuread_application_password" "application_password" {
   application_id = azuread_application.app_registration.id
-  end_date_relative = "4320h"
+  end_date = timeadd(timestamp(), "4320h") # 6 months
 }
 
 # This is not guidance and is done for demo purposes. The resource below will add the
