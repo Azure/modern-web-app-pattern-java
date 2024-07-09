@@ -26,7 +26,7 @@ public class SupportGuideEmailResponseProcessor {
     private final SupportCaseService supportCaseService;
 
     @Bean
-    Consumer<Message<String>> consumeemailresponse() {
+    Consumer<Message<byte[]>> consumeemailresponse() {
         return message -> {
             Checkpointer checkpointer = (Checkpointer) message.getHeaders().get(CHECKPOINTER);
             log.info("Received message: {}", message.getPayload());
@@ -49,9 +49,9 @@ public class SupportGuideEmailResponseProcessor {
         };
     }
 
-    private EmailResponse parseMessage(Message<String> message) {
+    private EmailResponse parseMessage(Message<byte[]> message) {
         try {
-            EmailResponse emailResponse = EmailResponse.parseFrom(message.getPayload().getBytes());
+            EmailResponse emailResponse = EmailResponse.parseFrom(message.getPayload());
             return emailResponse;
         } catch (InvalidProtocolBufferException e) {
             log.error("Error parsing email request message", e);
