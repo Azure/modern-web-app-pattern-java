@@ -26,7 +26,7 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   # https://github.com/microsoft/azure-container-apps/issues/592
   local_auth_enabled = false
 
-  zone_redundant = false
+  zone_redundant = var.environment == "prod" ? true : false
 
   tags = {
     "environment"      = var.environment
