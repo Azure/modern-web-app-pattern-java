@@ -57,4 +57,17 @@ variable "email_response_queue_name" {
 variable "isNetworkIsolated" {
   type        = bool
   description = "Indicates if the container app should be network isolated"
+  default     = false
+}
+
+variable "infrastructure_subnet_id" {
+  type        = string
+  description = "The ID of the subnet where the infrastructure resources should be created"
+  default     = null
+}
+
+variable "spoke_vnet_id" {
+  type        = string
+  description = "The ID of the spoke VNET"
+  default     = null
 }

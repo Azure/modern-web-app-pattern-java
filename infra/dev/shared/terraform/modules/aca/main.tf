@@ -7,14 +7,29 @@ terraform {
   }
 }
 
-resource "azurerm_container_app_environment" "container_app_environment" {
+resource "azurerm_container_app_environment" "container_app_environment_dev" {
+  count                      = var.environment == "dev" ? 1 : 0
   name                       = var.application_name
   location                   = var.location
   resource_group_name        = var.resource_group
   log_analytics_workspace_id = var.log_analytics_workspace_id
-  zone_redundancy_enabled    = var.environment == "prod" ? true : false
+
+  workload_profile {
+    name                  = "Consumption"
+    workload_profile_type = "Consumption"
+  }
+}
+
+resource "azurerm_container_app_environment" "container_app_environment_prod" {
+  count                      = var.environment == "prod" ? 1 : 0
+  name                       = var.application_name
+  location                   = var.location
+  resource_group_name        = var.resource_group
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+  zone_redundancy_enabled    = true
 
   internal_load_balancer_enabled = var.isNetworkIsolated
+  infrastructure_subnet_id       = var.infrastructure_subnet_id
 
   workload_profile {
     name                  = "Consumption"
@@ -24,16 +39,17 @@ resource "azurerm_container_app_environment" "container_app_environment" {
 
 resource "azurerm_container_app" "container_app" {
   name                         = "email-processor"
-  container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
+  container_app_environment_id = var.environment == "dev" ? azurerm_container_app_environment.container_app_environment_dev[0].id : azurerm_container_app_environment.container_app_environment_prod[0].id
   resource_group_name          = var.resource_group
   revision_mode                = "Single"
   workload_profile_name        = "Consumption"
   ingress {
     allow_insecure_connections = false
-    external_enabled = true
-    target_port = 80
+    external_enabled           = true
+    target_port                = 80
     traffic_weight {
-      percentage = 100
+      percentage      = 100
+      latest_revision = true
     }
   }
   tags = {
@@ -105,4 +121,21 @@ resource "azurerm_container_app" "container_app" {
       }
     }
   }
+}
+
+# Azure Private DNS provides a reliable, secure DNS service to manage and
+# resolve domain names in a virtual network without the need to add a custom DNS solution
+# https://docs.microsoft.com/azure/dns/private-dns-privatednszone
+resource "azurerm_private_dns_zone" "dns_for_aca" {
+  count               = var.environment == "prod" && var.isNetworkIsolated ? 1 : 0
+  name                = var.environment == "prod" ? azurerm_container_app_environment.container_app_environment_prod[0].default_domain : azurerm_container_app_environment.container_app_environment_dev[0].default_domain
+  resource_group_name = var.resource_group
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link_aca" {
+  count                 = var.environment == "prod" && var.isNetworkIsolated ? 1 : 0
+  name                  = "privatelink.azurecr.io"
+  private_dns_zone_name = azurerm_private_dns_zone.dns_for_aca[0].name
+  virtual_network_id    = var.spoke_vnet_id
+  resource_group_name   = var.resource_group
 }
