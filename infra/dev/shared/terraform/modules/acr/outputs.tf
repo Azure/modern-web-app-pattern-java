@@ -10,6 +10,6 @@ output "acr_login_server" {
 
 output "container_registry_user_assigned_identity_id" {
   value       = azurerm_user_assigned_identity.container_registry_user_assigned_identity.id
-  description = "The Azure User Assigned Identity ID."
+  description = "The ACR User Assigned Identity ID."
 
 }
