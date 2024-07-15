@@ -19,14 +19,16 @@ variable "application_name" {
   description = "The name of your application"
 }
 
-variable "private_endpoint_vnet_id" {
+variable "spoke_vnet_id" {
   type        = string
-  description = "The ID of the VNet where the private endpoint should be created"
+  description = "The ID of the spoke VNET"
+  default     = null
 }
 
 variable "private_endpoint_subnet_id" {
   type        = string
   description = "The ID of the subnet where the private endpoint should be created"
+  default     = null
 }
 
 variable "web_application_principal_id" {
@@ -37,4 +39,10 @@ variable "web_application_principal_id" {
 variable "container_app_identity_principal_id" {
   type        = string
   description = "The principal id of the identity of the container app"
+}
+
+variable "capacity" {
+  type        = number
+  description = "The capacity of the Service Bus namespace prod instance"
+  default     = 1
 }

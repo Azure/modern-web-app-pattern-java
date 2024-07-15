@@ -19,9 +19,10 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   name                          = azurecaf_name.servicebus_namespace_name.result
   location                      = var.location
   resource_group_name           = var.resource_group
-  sku                           = "Standard"
+  sku                           = var.environment == "prod" ? "Premium" : "Standard"
   public_network_access_enabled = var.environment == "prod" ? false : true
-
+  capacity                      = var.environment == "prod" ? var.capacity : 0
+  premium_messaging_partitions  = var.environment == "prod" ? 1 : 0
   # Should be set to false, but we need it for Keda scaling rules
   # https://github.com/microsoft/azure-container-apps/issues/592
   local_auth_enabled = false
@@ -125,7 +126,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link_s
   count                 = var.environment == "prod" ? 1 : 0
   name                  = "privatelink.servicebus.windows.net"
   private_dns_zone_name = azurerm_private_dns_zone.dns_for_service_bus[0].name
-  virtual_network_id    = var.private_endpoint_vnet_id
+  virtual_network_id    = var.spoke_vnet_id
   resource_group_name   = var.resource_group
 }
 
