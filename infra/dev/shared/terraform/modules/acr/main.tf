@@ -34,7 +34,7 @@ resource "azurerm_container_registry" "acr" {
       default_action = network_rule_set.value.default_action
 
       dynamic "ip_rule" {
-        for_each = network_rule_set.value.ip_rule
+        for_each = network_rule_set.value.ip_rules
         content {
           action   = ip_rule.value.action
           ip_range = ip_rule.value.ip_range
@@ -84,7 +84,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link_a
   count                 = var.environment == "prod" ? 1 : 0
   name                  = "privatelink.azurecr.io"
   private_dns_zone_name = azurerm_private_dns_zone.dns_for_acr[0].name
-  virtual_network_id    = var.private_endpoint_vnet_id
+  virtual_network_id    = var.spoke_vnet_id
   resource_group_name   = var.resource_group
 }
 

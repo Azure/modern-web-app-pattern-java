@@ -25,18 +25,15 @@ variable "aca_identity_principal_id" {
 }
 
 variable "network_rules" {
-  type = list(object({
-    default_action = string
-    ip_rules = list(object({
+  type = object({
+    default_action = optional(string)
+    ip_rules = optional(list(object({
       action   = string
-      ip_range = list(string)
-    }))
-  }))
+      ip_range = string
+    })), [])
+  })
 
-  default = [{
-    default_action = "Allow"
-    ip_rules       = []
-  }]
+  default = null
 }
 
 variable "georeplications" {
@@ -49,9 +46,11 @@ variable "georeplications" {
 variable "private_endpoint_subnet_id" {
   type        = string
   description = "The ID of the subnet where the private endpoint should be created"
+  default     = null
 }
 
-variable "private_endpoint_vnet_id" {
+variable "spoke_vnet_id" {
   type        = string
-  description = "The ID of the VNet where the private endpoint should be created"
+  description = "The ID of the Spoke VNET"
+  default     = null
 }
