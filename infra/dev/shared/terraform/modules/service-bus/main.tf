@@ -15,6 +15,8 @@ resource "azurecaf_name" "servicebus_namespace_name" {
   suffixes      = [var.environment]
 }
 
+# Create Service Bus namespace
+
 resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   name                          = azurecaf_name.servicebus_namespace_name.result
   location                      = var.location
@@ -35,7 +37,7 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   }
 }
 
-######
+# Create Email Request queue
 
 resource "azurecaf_name" "servicebus_email_request_queue_name" {
   name          = "email-request-queue"
@@ -55,7 +57,7 @@ resource "azurerm_servicebus_queue" "email_request_queue" {
   default_message_ttl   = "P14D"
 }
 
-########################
+# Create Email Response queue
 
 resource "azurecaf_name" "servicebus_email_response_queue_name" {
   name          = "email-response-queue"
@@ -76,8 +78,7 @@ resource "azurerm_servicebus_queue" "email_response_queue" {
 }
 
 
-#######
-
+# Create role assignments
 
 resource "azurerm_role_assignment" "role_servicebus_data_owner" {
   scope                = azurerm_servicebus_namespace.servicebus_namespace.id
@@ -113,9 +114,8 @@ resource "azurerm_role_assignment" "role_servicebus_data_receiver_email_processo
   principal_id         = var.container_app_identity_principal_id
 }
 
-# Azure Private DNS provides a reliable, secure DNS service to manage and
-# resolve domain names in a virtual network without the need to add a custom DNS solution
-# https://docs.microsoft.com/azure/dns/private-dns-privatednszone
+# Create Private DNS Zone and Endpoint for Service Bus
+
 resource "azurerm_private_dns_zone" "dns_for_service_bus" {
   count               = var.environment == "prod" ? 1 : 0
   name                = "privatelink.servicebus.windows.net"

@@ -9,6 +9,8 @@ terraform {
 
 data "azuread_client_config" "current" {}
 
+# Create Azure Container Registry
+
 resource "azurerm_container_registry" "acr" {
   name                = var.application_name
   resource_group_name = var.resource_group
@@ -44,6 +46,8 @@ resource "azurerm_container_registry" "acr" {
   }
 }
 
+# Create role assignments
+
 resource "azurerm_role_assignment" "container_app_acr_pull" {
   principal_id         = var.aca_identity_principal_id
   role_definition_name = "AcrPull"
@@ -71,9 +75,8 @@ resource "azurerm_role_assignment" "acr_contributor_user_role_assignement" {
   principal_id         = data.azuread_client_config.current.object_id
 }
 
-# Azure Private DNS provides a reliable, secure DNS service to manage and
-# resolve domain names in a virtual network without the need to add a custom DNS solution
-# https://docs.microsoft.com/azure/dns/private-dns-privatednszone
+# Create Private DNS Zone and Endpoint for ACR
+
 resource "azurerm_private_dns_zone" "dns_for_acr" {
   count               = var.environment == "prod" ? 1 : 0
   name                = "privatelink.azurecr.io"

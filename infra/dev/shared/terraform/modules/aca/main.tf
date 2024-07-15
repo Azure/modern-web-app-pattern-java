@@ -7,6 +7,8 @@ terraform {
   }
 }
 
+# Create Azure Container Apps Environment in Dev
+
 resource "azurerm_container_app_environment" "container_app_environment_dev" {
   count                      = var.environment == "dev" ? 1 : 0
   name                       = var.application_name
@@ -19,6 +21,8 @@ resource "azurerm_container_app_environment" "container_app_environment_dev" {
     workload_profile_type = "Consumption"
   }
 }
+
+# Create Azure Container Apps Environment in Prod
 
 resource "azurerm_container_app_environment" "container_app_environment_prod" {
   count                      = var.environment == "prod" ? 1 : 0
@@ -36,6 +40,8 @@ resource "azurerm_container_app_environment" "container_app_environment_prod" {
     workload_profile_type = "Consumption"
   }
 }
+
+# Create Azure Container App in the specified environment
 
 resource "azurerm_container_app" "container_app" {
   name                         = "email-processor"
@@ -123,9 +129,8 @@ resource "azurerm_container_app" "container_app" {
   }
 }
 
-# Azure Private DNS provides a reliable, secure DNS service to manage and
-# resolve domain names in a virtual network without the need to add a custom DNS solution
-# https://docs.microsoft.com/azure/dns/private-dns-privatednszone
+# Create Private DNS Zone for Azure Container Apps in Prod if internal load balancer is enabled
+
 resource "azurerm_private_dns_zone" "dns_for_aca" {
   count               = var.environment == "prod" && var.isNetworkIsolated ? 1 : 0
   name                = var.environment == "prod" ? azurerm_container_app_environment.container_app_environment_prod[0].default_domain : azurerm_container_app_environment.container_app_environment_dev[0].default_domain
