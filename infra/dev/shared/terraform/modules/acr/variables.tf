@@ -25,24 +25,24 @@ variable "aca_identity_principal_id" {
 }
 
 variable "network_rules" {
-  type = object({
+  type = list(object({
     default_action = string
     ip_rules = list(object({
       action   = string
-      ip_range = string
+      ip_range = list(string)
     }))
-  })
+  }))
 
-  default = {
+  default = [{
     default_action = "Allow"
-    ip_rules = []
-  }
+    ip_rules       = []
+  }]
 }
 
 variable "georeplications" {
   type = list(object({
     location = string
-  })) 
+  }))
   default = []
 }
 

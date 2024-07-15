@@ -14,36 +14,40 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name = var.resource_group
   location            = var.location
 
-  sku = "Premium"
+  sku = var.environment == "prod" ? "Premium" : "Basic"
 
   admin_enabled                 = false
-  public_network_access_enabled = var.environment == "prod" ? false : true
   network_rule_bypass_option    = "AzureServices"
+  public_network_access_enabled = var.environment == "prod" ? false : true
+  zone_redundancy_enabled       = var.environment == "prod" ? true : false
 
   dynamic "georeplications" {
     for_each = var.georeplications
     content {
       location = georeplications.value.location
     }
-    
-  }
-  network_rule_set {
-    default_action = var.network_rules.default_action
 
-    dynamic "ip_rule" {
-      for_each = var.network_rules.ip_rules != null ? var.network_rules.ip_rules : []
-      content {
-        action   = ip_rule.value.action
-        ip_range = ip_rule.value.ip_range
+  }
+  dynamic "network_rule_set" {
+    for_each = var.network_rules != null ? { this = var.network_rules } : {}
+    content {
+      default_action = network_rule_set.value.default_action
+
+      dynamic "ip_rule" {
+        for_each = network_rule_set.value.ip_rule
+        content {
+          action   = ip_rule.value.action
+          ip_range = ip_rule.value.ip_range
+        }
       }
     }
   }
 }
 
 resource "azurerm_role_assignment" "container_app_acr_pull" {
-  principal_id                     = var.aca_identity_principal_id
-  role_definition_name             = "AcrPull"
-  scope                            = azurerm_container_registry.acr.id
+  principal_id         = var.aca_identity_principal_id
+  role_definition_name = "AcrPull"
+  scope                = azurerm_container_registry.acr.id
 }
 
 resource "azurerm_user_assigned_identity" "container_registry_user_assigned_identity" {
@@ -61,10 +65,10 @@ resource "azurerm_role_assignment" "container_registry_user_assigned_identity_ac
 
 # For demo purposes, allow current user access to the container registry
 # Note: when running as a service principal, this is also needed
-resource azurerm_role_assignment acr_contributor_user_role_assignement {
-  scope                 = azurerm_container_registry.acr.id
-  role_definition_name  = "Contributor"
-  principal_id          = data.azuread_client_config.current.object_id
+resource "azurerm_role_assignment" "acr_contributor_user_role_assignement" {
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "Contributor"
+  principal_id         = data.azuread_client_config.current.object_id
 }
 
 # Azure Private DNS provides a reliable, secure DNS service to manage and
@@ -91,7 +95,7 @@ resource "azurerm_private_endpoint" "acr_pe" {
   resource_group_name = var.resource_group
   subnet_id           = var.private_endpoint_subnet_id
 
-   private_dns_zone_group {
+  private_dns_zone_group {
     name                 = "privatednsacrzonegroup"
     private_dns_zone_ids = [azurerm_private_dns_zone.dns_for_acr[0].id]
   }
