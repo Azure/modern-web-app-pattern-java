@@ -12,6 +12,14 @@ resource "azurerm_container_app_environment" "container_app_environment" {
   location                   = var.location
   resource_group_name        = var.resource_group
   log_analytics_workspace_id = var.log_analytics_workspace_id
+  zone_redundancy_enabled    = var.environment == "prod" ? true : false
+
+  internal_load_balancer_enabled = var.isNetworkIsolated
+
+  workload_profile {
+    name                  = "Consumption"
+    workload_profile_type = "Consumption"
+  }
 }
 
 resource "azurerm_container_app" "container_app" {
@@ -19,7 +27,15 @@ resource "azurerm_container_app" "container_app" {
   container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
   resource_group_name          = var.resource_group
   revision_mode                = "Single"
-
+  workload_profile_name        = "Consumption"
+  ingress {
+    allow_insecure_connections = false
+    external_enabled = true
+    target_port = 80
+    traffic_weight {
+      percentage = 100
+    }
+  }
   tags = {
     "environment"      = var.environment
     "application-name" = var.application_name

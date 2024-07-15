@@ -53,3 +53,8 @@ variable "email_response_queue_name" {
   type        = string
   description = "The name of the email response queue"
 }
+
+variable "isNetworkIsolated" {
+  type        = bool
+  description = "Indicates if the container app should be network isolated"
+}
