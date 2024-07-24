@@ -19,7 +19,7 @@ output "application_name" {
 }
 
 output "application_registration_id" {
-  value = azuread_application.app_registration.application_id
+  value = azuread_application.app_registration.client_id
   description = "The id of application registration  (also called Client ID)."
 }
 
