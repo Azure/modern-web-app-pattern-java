@@ -13,7 +13,7 @@
 
     <groupId>com.contoso</groupId>
     <artifactId>cams</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>cams</name>
     <description>Customer Account Management System</description>
 

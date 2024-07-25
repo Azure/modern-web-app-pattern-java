@@ -11,7 +11,12 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
+    <groupId>com.contoso.cams</groupId>
     <artifactId>proto</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>proto</name>
+    <description>Protobuf</description>
+
 
     <properties>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
