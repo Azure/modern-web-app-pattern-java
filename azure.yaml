@@ -5,7 +5,7 @@ metadata:
   template: modern-java-web@1.1.0
 infra:
     provider: "terraform"
-    path: "./infra/terraform"
+    path: "./infra/dev/terraform"
 hooks:
   preprovision:
     interactive: true
