@@ -72,7 +72,20 @@ variable "contoso_webapp_options" {
     redis_host_name               = string
     redis_port                    = number
     redis_password                = string
+
+    service_bus_namespace               = string
+    service_bus_email_request_queue     = string
+    service_bus_email_response_queue    = string
+
+    storage_account_name          = string
+    storage_container_name        = string
   })
 
   description = "The options for the webapp"
+}
+
+variable "service_management_reference" {
+  type = string
+  description = "value for the service management reference"
+  default = null
 }

@@ -33,7 +33,7 @@ module "secondary_cache" {
 # Cache - Dev
 # ----------------------------------------------------------------------------------------------
 
-module "dev-cache" {
+module "dev_cache" {
   count                       = var.environment == "dev" ? 1 : 0
   source                      = "../shared/terraform/modules/cache"
   resource_group              = azurerm_resource_group.dev[0].name
