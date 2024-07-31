@@ -13,9 +13,9 @@ module "servicebus" {
   web_application_principal_id =  module.application[0].application_principal_id
   container_app_identity_principal_id = module.aca[0].identity_principal_id
 }
-# -----------------
-#  Secondary Servicebus for Prod only
-# -----------------
+# ----------------------------------------------------------------------------------------------
+#  Secondary Servicebus - Prod - Secondary Region
+# ----------------------------------------------------------------------------------------------
 module "secondary_servicebus" {
   count               = var.environment == "prod" ? 1 : 0
   source              = "../shared/terraform/modules/service-bus"
