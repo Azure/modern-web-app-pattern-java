@@ -38,6 +38,7 @@ resource "azurerm_container_registry" "acr" {
     }
 
   }
+  #│ `network_rule_set_set` can only be specified for a Premium Sku -> prod.
   dynamic "network_rule_set" {
     for_each = var.network_rules != null && var.environment == "prod" ? { this = var.network_rules } : {}
     content {
