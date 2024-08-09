@@ -7,11 +7,18 @@ terraform {
   }
 }
 
+# Container Apps environment naming convention using azurecaf_name module.
+resource "azurecaf_name" "container_app_environment_name" {
+  name          = var.application_name
+  resource_type = "azurerm_container_app_environment"
+  suffixes      = [var.environment]
+}
+
 # Create Azure Container Apps Environment in Dev
 
 resource "azurerm_container_app_environment" "container_app_environment_dev" {
   count                      = var.environment == "dev" ? 1 : 0
-  name                       = var.application_name
+  name                        = azurecaf_name.container_app_environment_name.result
   location                   = var.location
   resource_group_name        = var.resource_group
   log_analytics_workspace_id = var.log_analytics_workspace_id
@@ -26,7 +33,7 @@ resource "azurerm_container_app_environment" "container_app_environment_dev" {
 
 resource "azurerm_container_app_environment" "container_app_environment_prod" {
   count                      = var.environment == "prod" ? 1 : 0
-  name                       = var.application_name
+  name                        = azurecaf_name.container_app_environment_name.result
   location                   = var.location
   resource_group_name        = var.resource_group
   log_analytics_workspace_id = var.log_analytics_workspace_id

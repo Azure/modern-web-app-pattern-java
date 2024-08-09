@@ -101,3 +101,37 @@ output "SERVICE_APPLICATION_ENDPOINTS" {
   value       = length(module.dev_frontdoor) > 0 ? ["https://${module.dev_frontdoor[0].host_name}"] : null
   description = "The Dev Web application Front Door URL."
 }
+
+# ----------------------
+#  Azure Container Apps
+# ----------------------
+
+output "AZURE_CONTAINER_REGISTRY_ENDPOINT" {
+  value = var.environment == "prod" ? module.acr[0].acr_login_server : module.dev_acr[0].acr_login_server
+  description = "The Azure Container Registry Endpoint."
+}
+
+output "acr_name" {
+  value = var.environment == "prod" ? module.acr[0].name : module.dev_acr[0].acr_name
+  description = "The Azure Container Registry Name."
+}
+
+output "acr_login_server" {
+  value = var.environment == "prod" ? module.acr[0].acr_login_server : module.dev_acr[0].acr_login_server
+  description = "The Azure Container Registry Login Server."
+}
+
+# ----------------------
+#  Storage
+# ----------------------
+
+
+output "azure_storage_account" {
+  value = var.environment == "prod" ? module.storage[0].storage_account_name : module.dev_storage[0].storage_account_name
+  description = "Azure Storage account name."
+}
+
+output "storage_container_name" {
+  value = var.environment == "prod" ? module.storage[0].storage_container_name : module.dev_storage[0].storage_container_name
+  description = "Azure Storage container name."
+}

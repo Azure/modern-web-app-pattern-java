@@ -15,6 +15,11 @@ provider "azurerm" {
       skip_shutdown_and_force_delete = true
     }
   }
+  
+  # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account#shared_access_key_enabled
+  # by default teraform uses the shared access key to access the storage account.
+  # to have terraform, use azure ad instead, set this property to true
+  storage_use_azuread = true
 }
 
 data "azuread_client_config" "current" {}

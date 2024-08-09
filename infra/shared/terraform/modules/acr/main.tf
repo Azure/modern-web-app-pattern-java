@@ -9,10 +9,18 @@ terraform {
 
 data "azuread_client_config" "current" {}
 
+# Container Registry naming convention using azurecaf_name module.
+resource "azurecaf_name" "azurerm_container_registry" {
+  name          = var.application_name
+  resource_type = "azurerm_container_registry"
+  suffixes      = [var.environment]
+}
+
+
 # Create Azure Container Registry
 
 resource "azurerm_container_registry" "acr" {
-  name                = var.application_name
+  name                = azurecaf_name.azurerm_container_registry.result
   resource_group_name = var.resource_group
   location            = var.location
 
@@ -30,8 +38,9 @@ resource "azurerm_container_registry" "acr" {
     }
 
   }
+  #│ `network_rule_set_set` can only be specified for a Premium Sku -> prod.
   dynamic "network_rule_set" {
-    for_each = var.network_rules != null ? { this = var.network_rules } : {}
+    for_each = var.network_rules != null && var.environment == "prod" ? { this = var.network_rules } : {}
     content {
       default_action = network_rule_set.value.default_action
 
