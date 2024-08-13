@@ -122,7 +122,7 @@ resource "azurerm_linux_web_app" "application" {
     AZURE_STORAGE_CONTAINER_NAME = var.contoso_webapp_options.storage_container_name
 
     CONTOSO_RETRY_DEMO = "0"
-    CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE="email"
+    CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE="queue"
   }
 
   logs {
@@ -147,7 +147,7 @@ module "private_endpoint" {
   resource_group              = var.resource_group
   location                    = var.location
   app_service_name            = azurerm_linux_web_app.application.name
-  appsvc_webapp_id            = azurerm_linux_web_app.application.id 
+  appsvc_webapp_id            = azurerm_linux_web_app.application.id
   private_endpoint_subnet_id  = var.private_endpoint_subnet_id
   private_dns_resource_group  = var.private_dns_resource_group
 }
