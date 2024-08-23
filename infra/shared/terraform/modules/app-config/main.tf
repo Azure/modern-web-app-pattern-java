@@ -9,13 +9,12 @@ terraform {
 
 data "azuread_client_config" "current" {}
 
-# Container Registry naming convention using azurecaf_name module.
+# App Configuration naming convention using azurecaf_name module.
 resource "azurecaf_name" "azurerm_app_config" {
   name          = var.application_name
   resource_type = "azurerm_app_configuration"
   suffixes      = [var.environment]
 }
-
 
 # Create Azure App Configuration
 
@@ -24,7 +23,7 @@ resource "azurerm_app_configuration" "app_config" {
   resource_group_name = var.resource_group
   location            = var.location
 
-  public_network_access = var.environment == "prod" ? false : true
+  public_network_access = var.environment == "prod" ? "Disabled" : "Enabled"
 
   identity {
     type = "SystemAssigned"
@@ -32,30 +31,59 @@ resource "azurerm_app_configuration" "app_config" {
 
   purge_protection_enabled = var.environment == "prod" ? true : false
 
-  sku = var.environment == "prod" ? "Standard" : "Free"
+  sku = var.environment == "prod" ? "standard" : "free"
 
   dynamic "replica" {
     for_each = var.replica_location != null ? [var.replica_location] : []
-    content{
-        location = replica.value
-        name = "${replica.value}-${azurecaf_name.azurerm_app_config.result}"
+    content {
+      location = replica.value
+      name     = "${replica.value}-${azurecaf_name.azurerm_app_config.result}"
     }
   }
+}
+
+# Create App Configuration Features
+
+resource "azurerm_app_configuration_feature" "feature" {
+  for_each               = var.features != null ? { for idx, feature in var.features : idx => feature } : {}
+  configuration_store_id = azurerm_app_configuration.app_config.id
+  description            = each.value.description
+  name                   = each.value.name
+
+  enabled = each.value.enabled
+  locked  = each.value.locked
+  label   = each.value.label
+}
+
+# Create App Configuration Keys
+
+resource "azurerm_app_configuration_key" "key" {
+  for_each               = var.keys != null ? { for idx, key in var.keys : idx => key } : {}
+  configuration_store_id = azurerm_app_configuration.app_config.id
+  key                    = each.value.key
+  type                   = each.value.type
+  content_type           = each.value.type == "kv" ? each.value.content_type : null
+  value                  = each.value.type == "kv" ? each.value.value : null
+  vault_key_reference    = each.value.type == "vault" ? each.value.vault_key_reference : null
+  label                  = each.value.label
+  locked                 = each.value.locked
 }
 
 # Create role assignments
 
 resource "azurerm_role_assignment" "azconfig_reader_user_role_assignment" {
-  scope                = azurecaf_name.azurerm_app_config.id
+  scope                = azurerm_app_configuration.app_config.id
   role_definition_name = "App Configuration Data Reader"
-  principal_id         = var.aca_identity_principal_id
+  principal_id         = azurerm_user_assigned_identity.test.principal_id
+
+  depends_on = [azurerm_role_assignment.azconfig_owner_user_role_assignment]
 }
 
 # For demo purposes, allow current user access to the app config
 # Note: when running as a service principal, this is also needed
 
 resource "azurerm_role_assignment" "azconfig_owner_user_role_assignment" {
-  scope                = azurecaf_name.azurerm_app_config.id
+  scope                = azurerm_app_configuration.app_config.id
   role_definition_name = "App Configuration Data Owner"
   principal_id         = data.azuread_client_config.current.object_id
 }

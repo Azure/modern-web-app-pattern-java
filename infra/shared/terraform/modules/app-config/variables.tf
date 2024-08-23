@@ -36,6 +36,41 @@ variable "network_rules" {
   default = null
 }
 
+variable "features" {
+  type = list(object({
+    description = string
+    name        = string
+    enabled     = bool
+    locked      = bool
+    label       = string
+  }))
+  default = null
+
+  description = "The features to create in the App Configuration"
+}
+
+variable "keys" {
+  type = list(object({
+    key                 = string
+    content_type        = string
+    label               = string
+    value               = string
+    locked              = bool
+    type                = string
+    vault_key_reference = string
+  }))
+  default = []
+
+  validation {
+    condition = alltrue([
+      for k in var.keys : (k.type == "kv" && (k.value != null && !empty(k.value))) || (k.type == "vault" && (k.vault_key_reference != null && !empty(k.vault_key_reference)))
+    ])
+    error_message = "Type must be kv or vault. If vault, vault_key_reference must be set. If kv, value must be set."
+  }
+
+  description = "The keys to create in the App Configuration"
+}
+
 variable "replica_location" {
   type        = string
   description = "The location of the replica"
