@@ -72,7 +72,7 @@ azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <service_management_reference>
 Run the following command to build the applications:
 
 ```shell
-./mvnw clean package
+./mvnw clean install
 ```
 
 ## Create the Azure resources and deploy the code
