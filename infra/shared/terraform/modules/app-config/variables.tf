@@ -24,25 +24,13 @@ variable "aca_identity_principal_id" {
   description = "The principal id of the identity of the container app"
 }
 
-variable "network_rules" {
-  type = object({
-    default_action = optional(string)
-    ip_rules = optional(list(object({
-      action   = string
-      ip_range = string
-    })), [])
-  })
-
-  default = null
-}
-
 variable "features" {
   type = list(object({
-    description = string
+    description = optional(string)
     name        = string
-    enabled     = bool
-    locked      = bool
-    label       = string
+    enabled     = optional(bool, false)
+    locked      = optional(bool, false)
+    label       = optional(string)
   }))
   default = null
 
@@ -52,18 +40,19 @@ variable "features" {
 variable "keys" {
   type = list(object({
     key                 = string
-    content_type        = string
-    label               = string
-    value               = string
-    locked              = bool
-    type                = string
-    vault_key_reference = string
+    content_type        = optional(string)
+    label               = optional(string)
+    value               = optional(string)
+    locked              = optional(bool)
+    type                = optional(string, "kv")
+    vault_key_reference = optional(string)
   }))
   default = []
 
   validation {
     condition = alltrue([
-      for k in var.keys : (k.type == "kv" && (k.value != null && !empty(k.value))) || (k.type == "vault" && (k.vault_key_reference != null && !empty(k.vault_key_reference)))
+      for k in var.keys :
+      (k.type == "kv" && k.value != null) || (k.type == "vault" && k.vault_key_reference != null)
     ])
     error_message = "Type must be kv or vault. If vault, vault_key_reference must be set. If kv, value must be set."
   }

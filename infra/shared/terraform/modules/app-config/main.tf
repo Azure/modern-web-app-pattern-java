@@ -23,21 +23,23 @@ resource "azurerm_app_configuration" "app_config" {
   resource_group_name = var.resource_group
   location            = var.location
 
+  sku = var.environment == "prod" ? "standard" : "free"
+
+  purge_protection_enabled = var.environment == "prod" ? true : false
+
   public_network_access = var.environment == "prod" ? "Disabled" : "Enabled"
+
+  local_auth_enabled = var.environment == "prod" ? false : true
 
   identity {
     type = "SystemAssigned"
   }
 
-  purge_protection_enabled = var.environment == "prod" ? true : false
-
-  sku = var.environment == "prod" ? "standard" : "free"
-
   dynamic "replica" {
     for_each = var.replica_location != null ? [var.replica_location] : []
     content {
       location = replica.value
-      name     = "${replica.value}-${azurecaf_name.azurerm_app_config.result}"
+      name     = "AppConfig${var.environment}${replica.value}"
     }
   }
 }
@@ -74,7 +76,7 @@ resource "azurerm_app_configuration_key" "key" {
 resource "azurerm_role_assignment" "azconfig_reader_user_role_assignment" {
   scope                = azurerm_app_configuration.app_config.id
   role_definition_name = "App Configuration Data Reader"
-  principal_id         = azurerm_user_assigned_identity.test.principal_id
+  principal_id         = var.aca_identity_principal_id
 
   depends_on = [azurerm_role_assignment.azconfig_owner_user_role_assignment]
 }
@@ -118,7 +120,7 @@ resource "azurerm_private_endpoint" "azconfig_pe" {
 
   private_service_connection {
     name                           = "peconnection-azconfig"
-    private_connection_resource_id = azurecaf_name.azurerm_app_config.id
+    private_connection_resource_id = azurerm_app_configuration.app_config.id
     is_manual_connection           = false
     subresource_names              = ["configurationStores"]
   }
