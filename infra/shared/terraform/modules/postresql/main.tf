@@ -41,7 +41,7 @@ resource "azurecaf_name" "postgresql_server" {
 # https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/how-to-create-users
 # https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-azure-ad-authentication
 resource "azurerm_postgresql_flexible_server" "postgresql_database" {
-  count               = var.environment == "prod" ? 1 : 0 
+  count               = var.environment == "prod" ? 1 : 0
   name                = azurecaf_name.postgresql_server[0].result
   resource_group_name = var.resource_group
   location            = var.location
@@ -76,7 +76,7 @@ resource "azurerm_postgresql_flexible_server" "postgresql_database" {
   authentication {
     active_directory_auth_enabled  = true
     password_auth_enabled          = true
-    
+
     tenant_id = var.azure_ad_tenant_id
   }
 
@@ -97,29 +97,30 @@ resource "azurerm_monitor_diagnostic_setting" "postgresql_diagnostic" {
 
   enabled_log {
     category_group = "audit"
-
-    retention_policy {
-      days    = 0
-      enabled = false
-    }
+    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
+    # retention_policy {
+    #   days    = 0
+    #   enabled = false
+    # }
   }
 
   enabled_log {
     category_group = "allLogs"
-
-    retention_policy {
-      days    = 0
-      enabled = false
-    }
+    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
+    # retention_policy {
+    #   days    = 0
+    #   enabled = false
+    # }
   }
 
   metric {
     category = "AllMetrics"
     enabled  = true
-    retention_policy {
-      enabled = false
-      days    = 0
-    }
+    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
+    # retention_policy {
+    #   enabled = false
+    #   days    = 0
+    # }
   }
 }
 
@@ -135,7 +136,7 @@ resource "azurecaf_name" "dev_postgresql_server" {
 }
 
 resource "azurerm_postgresql_flexible_server" "dev_postresql_database" {
-  count                         = var.environment == "dev" ? 1 : 0 
+  count                         = var.environment == "dev" ? 1 : 0
   name                          = azurecaf_name.dev_postgresql_server[0].result
   resource_group_name           = var.resource_group
   location                      = var.location
@@ -160,7 +161,7 @@ resource "azurerm_postgresql_flexible_server" "dev_postresql_database" {
 }
 
 resource "azurerm_postgresql_flexible_server_firewall_rule" "dev_postresql_database_allow_access_rule" {
-  count            = var.environment == "dev" ? 1 : 0 
+  count            = var.environment == "dev" ? 1 : 0
   name             = "allow-access-from-azure-services"
   server_id        = azurerm_postgresql_flexible_server.dev_postresql_database[0].id
   start_ip_address = "0.0.0.0"
