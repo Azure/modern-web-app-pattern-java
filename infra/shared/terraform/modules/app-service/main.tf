@@ -51,7 +51,10 @@ resource "azurerm_linux_web_app" "application" {
   virtual_network_subnet_id = var.appsvc_subnet_id
 
   identity {
-    type = "SystemAssigned"
+    type = "SystemAssigned, UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.app_service_user_assigned_identity.id
+    ]
   }
 
   tags = {
@@ -150,6 +153,14 @@ module "private_endpoint" {
   appsvc_webapp_id            = azurerm_linux_web_app.application.id
   private_endpoint_subnet_id  = var.private_endpoint_subnet_id
   private_dns_resource_group  = var.private_dns_resource_group
+}
+
+# Create role assignments
+
+resource "azurerm_user_assigned_identity" "app_service_user_assigned_identity" {
+  name                = "AppServiceUserAssignedIdentity"
+  resource_group_name = var.resource_group
+  location            = var.location
 }
 
 # Configure Diagnostic Settings for App Service

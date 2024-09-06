@@ -77,3 +77,8 @@ variable "hub_vnet_id" {
   description = "The ID of the Spoke VNET"
   default     = null
 }
+
+variable "app_service_identity_principal_id" {
+  type        = string
+  description = "The User Assigned identity id of the App Service"
+}
