@@ -96,7 +96,7 @@ resource "azurerm_user_assigned_identity" "azconfig_user_assigned_identity" {
 
 resource "azurerm_role_assignment" "azconfig_user_assigned_identity_role_assignment" {
   scope                = azurerm_app_configuration.app_config.id
-  role_definition_name = "App Configuration Data Owner"
+  role_definition_name = "App Configuration Data Reader"
   principal_id         = azurerm_user_assigned_identity.azconfig_user_assigned_identity.principal_id
 }
 
