@@ -102,7 +102,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link_a
   count                 = var.environment == "prod" ? 1 : 0
   name                  = "privatelink.azconfig.io"
   private_dns_zone_name = azurerm_private_dns_zone.dns_for_azconfig[0].name
-  virtual_network_id    = var.spoke_vnet_id
+  virtual_network_id    = var.hub_vnet_id
   resource_group_name   = var.resource_group
 }
 
