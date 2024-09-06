@@ -16,6 +16,7 @@ module  "aca" {
     servicebus_namespace = module.servicebus[0].namespace_name
     container_registry_user_assigned_identity_id = module.acr[0].container_registry_user_assigned_identity_id
     acr_login_server = module.acr[0].acr_login_server
+    app_insights_connection_string = module.hub_app_insights[0].connection_string
     log_analytics_workspace_id  = var.environment == "prod" ? module.hub_app_insights[0].log_analytics_workspace_id:  module.dev_app_insights[0].log_analytics_workspace_id
     servicebus_namespace_primary_connection_string = module.servicebus[0].servicebus_namespace_primary_connection_string
 }
@@ -37,6 +38,7 @@ module  "secondary_aca" {
     container_registry_user_assigned_identity_id = module.acr[0].container_registry_user_assigned_identity_id
     acr_login_server = module.acr[0].acr_login_server
     log_analytics_workspace_id  = module.hub_app_insights[0].log_analytics_workspace_id
+    app_insights_connection_string = module.hub_app_insights[0].connection_string
     servicebus_namespace_primary_connection_string = module.secondary_servicebus[0].servicebus_namespace_primary_connection_string
 }
 
@@ -60,5 +62,6 @@ module  "dev_aca" {
     container_registry_user_assigned_identity_id = module.dev_acr[0].container_registry_user_assigned_identity_id
     acr_login_server = module.dev_acr[0].acr_login_server
     log_analytics_workspace_id  = module.dev_app_insights[0].log_analytics_workspace_id
+    app_insights_connection_string = module.dev_app_insights[0].connection_string
     servicebus_namespace_primary_connection_string = module.dev_servicebus[0].servicebus_namespace_primary_connection_string
 }

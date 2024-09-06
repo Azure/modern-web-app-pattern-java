@@ -116,6 +116,10 @@ resource "azurerm_container_app" "container_app" {
         name  = "AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME"
         value = var.email_response_queue_name
       }
+      env {
+        name = "APPLICATIONINSIGHTS_CONNECTION_STRING"
+        value = var.app_insights_connection_string
+      }
     }
     max_replicas = 10
     min_replicas = 1

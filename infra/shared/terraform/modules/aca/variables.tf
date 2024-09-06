@@ -19,6 +19,11 @@ variable "application_name" {
   description = "The name of your application"
 }
 
+variable "app_insights_connection_string" {
+  type        = string
+  description = "The app insights connection string"
+}
+
 variable "log_analytics_workspace_id" {
   type        = string
   description = "The ID of the Log Analytics workspace"
