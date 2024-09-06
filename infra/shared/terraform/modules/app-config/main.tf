@@ -76,28 +76,10 @@ resource "azurerm_app_configuration_key" "key" {
 
 # Create role assignments
 
-resource "azurerm_role_assignment" "azconfig_reader_user_role_assignment" {
-  principal_id         = var.aca_identity_principal_id
-  role_definition_name = "App Configuration Data Reader"
-  scope                = azurerm_app_configuration.app_config.id
-}
-
 resource "azurerm_role_assignment" "app_service_reader_user_role_assignment" {
   principal_id         = var.app_service_identity_principal_id
   role_definition_name = "App Configuration Data Reader"
   scope                = azurerm_app_configuration.app_config.id
-}
-
-resource "azurerm_user_assigned_identity" "azconfig_user_assigned_identity" {
-  name                = "AzConfigUserAssignedIdentity"
-  resource_group_name = var.resource_group
-  location            = var.location
-}
-
-resource "azurerm_role_assignment" "azconfig_user_assigned_identity_role_assignment" {
-  scope                = azurerm_app_configuration.app_config.id
-  role_definition_name = "App Configuration Data Reader"
-  principal_id         = azurerm_user_assigned_identity.azconfig_user_assigned_identity.principal_id
 }
 
 # For demo purposes, allow current user access to the app config
