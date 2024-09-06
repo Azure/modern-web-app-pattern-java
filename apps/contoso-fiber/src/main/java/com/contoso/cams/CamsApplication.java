@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.microsoft.applicationinsights.attach.ApplicationInsights;
+
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 
 @SpringBootApplication
@@ -20,6 +22,7 @@ import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 public class CamsApplication {
 
 	public static void main(String[] args) {
+        ApplicationInsights.attach();
 		SpringApplication.run(CamsApplication.class, args);
 	}
 

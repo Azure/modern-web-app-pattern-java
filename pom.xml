@@ -33,6 +33,7 @@
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <spring-cloud-azure.version>5.12.0</spring-cloud-azure.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
+        <applicationinsights.version>3.5.4</applicationinsights.version>
     </properties>
 
     <dependencyManagement>
@@ -66,6 +67,11 @@
 				<artifactId>protobuf-java-util</artifactId>
 				<version>${protobuf.java.util.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>applicationinsights-runtime-attach</artifactId>
+                <version>${applicationinsights.version}</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
