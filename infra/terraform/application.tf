@@ -7,7 +7,7 @@
 # ---------------------
 
 module "application" {
-  count                          = var.environment == "prod" ? 1 : 0  
+  count                          = var.environment == "prod" ? 1 : 0
   source                         = "../shared/terraform/modules/app-service"
   resource_group                 = azurerm_resource_group.spoke[0].name
   application_name               = var.application_name
@@ -17,6 +17,7 @@ module "application" {
   appsvc_subnet_id               = module.spoke_vnet[0].subnets[local.app_service_subnet_name].id
   private_endpoint_subnet_id     = module.spoke_vnet[0].subnets[local.private_link_subnet_name].id
   app_insights_connection_string = module.hub_app_insights[0].connection_string
+  app_insights_instrumentation_key = module.hub_app_insights[0].instrumentation_key
   log_analytics_workspace_id     = module.hub_app_insights[0].log_analytics_workspace_id
   frontdoor_host_name            = module.frontdoor[0].host_name
   frontdoor_profile_uuid         = module.frontdoor[0].resource_guid
@@ -25,7 +26,7 @@ module "application" {
   contoso_webapp_options = {
      contoso_active_directory_tenant_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_tenant_id[0].id})"
     contoso_active_directory_client_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_client_id[0].id})"
-    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_client_secret[0].id})"    
+    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_client_secret[0].id})"
     postgresql_database_url                = format("@Microsoft.KeyVault(SecretUri=%s)", module.secrets[0].secret_names["contoso-database-url"])
     postgresql_database_user               = format("@Microsoft.KeyVault(SecretUri=%s)", module.secrets[0].secret_names["contoso-database-admin"])
     postgresql_database_password           = format("@Microsoft.KeyVault(SecretUri=%s)", module.secrets[0].secret_names["contoso-database-admin-password"])
@@ -55,15 +56,16 @@ module "secondary_application" {
   appsvc_subnet_id               = module.secondary_spoke_vnet[0].subnets[local.app_service_subnet_name].id
   private_endpoint_subnet_id  = module.secondary_spoke_vnet[0].subnets[local.private_link_subnet_name].id
   app_insights_connection_string = module.hub_app_insights[0].connection_string
+  app_insights_instrumentation_key = module.hub_app_insights[0].instrumentation_key
   log_analytics_workspace_id     = module.hub_app_insights[0].log_analytics_workspace_id
   frontdoor_host_name            = module.frontdoor[0].host_name
   frontdoor_profile_uuid         = module.frontdoor[0].resource_guid
   public_network_access_enabled  = false
 
-  contoso_webapp_options = {    
+  contoso_webapp_options = {
     contoso_active_directory_tenant_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_tenant_id[0].id})"
     contoso_active_directory_client_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_client_id[0].id})"
-    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_client_secret[0].id})"    
+    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.contoso_application_client_secret[0].id})"
     postgresql_database_url                = format("@Microsoft.KeyVault(SecretUri=%s)", module.secondary_secrets[0].secret_names["secondary-contoso-database-url"])
     postgresql_database_user               = format("@Microsoft.KeyVault(SecretUri=%s)", module.secondary_secrets[0].secret_names["secondary-contoso-database-admin"])
     postgresql_database_password           = format("@Microsoft.KeyVault(SecretUri=%s)", module.secondary_secrets[0].secret_names["secondary-contoso-database-admin-password"])
@@ -77,7 +79,7 @@ module "secondary_application" {
     storage_container_name                 = format("@Microsoft.KeyVault(SecretUri=%s)", module.secondary_secrets[0].secret_names["secondary-contoso-storage-container-name"])
 
   }
-  
+
 }
 
 // ---------------------------------------------------------------------------
@@ -99,6 +101,7 @@ module "dev_application" {
   appsvc_subnet_id               = null
   private_endpoint_subnet_id     = null
   app_insights_connection_string = module.dev_app_insights[0].connection_string
+  app_insights_instrumentation_key = module.dev_app_insights[0].instrumentation_key
   log_analytics_workspace_id     = module.dev_app_insights[0].log_analytics_workspace_id
   frontdoor_host_name            = module.dev_frontdoor[0].host_name
   frontdoor_profile_uuid         = module.dev_frontdoor[0].resource_guid
@@ -107,7 +110,7 @@ module "dev_application" {
   contoso_webapp_options = {
     contoso_active_directory_tenant_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_tenant_id[0].id})"
     contoso_active_directory_client_id     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_id[0].id})"
-    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_secret[0].id})"      
+    contoso_active_directory_client_secret = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.dev_contoso_application_client_secret[0].id})"
     postgresql_database_url                = format("@Microsoft.KeyVault(SecretUri=%s)", module.dev_secrets[0].secret_names["dev-contoso-database-url"])
     postgresql_database_user               = format("@Microsoft.KeyVault(SecretUri=%s)", module.dev_secrets[0].secret_names["dev-contoso-database-admin"])
     postgresql_database_password           = format("@Microsoft.KeyVault(SecretUri=%s)", module.dev_secrets[0].secret_names["dev-contoso-database-admin-password"])

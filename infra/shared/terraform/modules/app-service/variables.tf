@@ -49,6 +49,11 @@ variable "app_insights_connection_string" {
   description = "The app insights connection string"
 }
 
+variable "app_insights_instrumentation_key" {
+  type       = string
+  description = "The app insights instrumentation key"
+}
+
 variable "log_analytics_workspace_id" {
   type        = string
   description = "The id of the log analytics workspace"

@@ -142,11 +142,6 @@
             <artifactId>spring-cloud-azure-starter-storage-blob</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>applicationinsights-runtime-attach</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
