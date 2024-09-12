@@ -31,13 +31,6 @@ resource "azurerm_app_configuration" "app_config" {
 
   local_auth_enabled = var.environment == "prod" ? false : true
 
-  identity {
-    type = "SystemAssigned, UserAssigned"
-    identity_ids = [
-        azurerm_user_assigned_identity.azconfig_user_assigned_identity.id
-    ]
-  }
-
   dynamic "replica" {
     for_each = var.replica_location != null ? [var.replica_location] : []
     content {
@@ -103,7 +96,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link_a
   count                 = var.environment == "prod" ? 1 : 0
   name                  = "privatelink.azconfig.io"
   private_dns_zone_name = azurerm_private_dns_zone.dns_for_azconfig[0].name
-  virtual_network_id    = var.hub_vnet_id
+  virtual_network_id    = var.spoke_vnet_id
   resource_group_name   = var.resource_group
 }
 

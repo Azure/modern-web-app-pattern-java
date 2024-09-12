@@ -72,7 +72,7 @@ variable "private_endpoint_subnet_id" {
   default     = null
 }
 
-variable "hub_vnet_id" {
+variable "spoke_vnet_id" {
   type        = string
   description = "The ID of the Spoke VNET"
   default     = null
