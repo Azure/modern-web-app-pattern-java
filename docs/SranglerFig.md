@@ -22,7 +22,9 @@ The new email service is implemented (here)[https://github.com/Azure/modern-web-
 
 4. **Gradually migrate functionality**: The email functionality is gradually migrated from the old service to the new service. This can be done by routing a percentage of the email requests to the new service and gradually increasing the percentage over time.
 
-Change the `CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE` environment variable from `email` to `queue` to migrate the email functionality to the new email service that's integrated with Azure Service Bus.
+The `CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE` environment variable changes the behavior of CAMS. Possible values for `CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE` are `email` and `queue`. 
+* `email` refers to the old functionaly where the the monolithic CAMS application sent out emails directly.
+* `queue` is the new functionality where messages are sent to to the new email service through Azure Service Bus.
 
 ![request-service-email-setting](assets/request-service-email-setting.png)
 
