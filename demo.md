@@ -67,6 +67,30 @@ After simulating the Strangler Fig Pattern, you can view the distributed tracing
 
     ![transaction-details](./docs/assets/app-insights-transaction-details.png)
 
+## Autoscaling Email Processor
+
+The `email-processor` container app is configured to autoscale based on the number of messages in the Azure Service Bus. The `email-processor` container app scales out when the number of messages in the Service Bus exceeds a certain threshold.
+
+![autoscale-settings](./docs/assets/email-processor-scaling-rule.png)
+
+To simulate the autoscaling, follow the steps below:
+
+1. Navigate to the App Service and change the `CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE` environment variable to `demo-load`.
+
+    ![edit-application-setting](./docs/assets/edit-application-setting-demo-load.png)
+
+    Confirm that the Web App is restarted.
+
+1. Send an email following the steps in the Strangler Fig Pattern section.
+
+1. Navigate to the Azure Service Bus in the Azure portal. You will see a spike in incoming messages.
+
+    ![service-bus-incoming-messages](./docs/assets/service-bus-request-queue-load-demo.png)
+
+1. Navigate to the Container App in the Azure portal and click on the `Revisions and replicas` link under `Application` in the left navigation. Finally, click on the `Replicas` tab. You will see that the number of replicas has increased.
+
+    ![container-app-revisions-replicas](./docs/assets/container-app-revisions-replicas.png)
+
 ## Retry pattern
 
 We built a configuration setting that lets you simulate and test a failure from the web app. The setting is called `CONTOSO_RETRY_DEMO`. We've included this configuration in the deployable code. The `CONTOSO_RETRY_DEMO` setting simulates an error when the end user tries to get Service Plans within the Contoso Fiber application. `CONTOSO_RETRY_DEMO` is an editable setting that determines the number of back-to-back errors between a successful request. A value of 2 generates 1 error after returning one successful response. This is disabled by default.  Removing the setting, or changing the value to 0 will disable the feature.
