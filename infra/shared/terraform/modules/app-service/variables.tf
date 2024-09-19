@@ -59,29 +59,9 @@ variable "public_network_access_enabled" {
   description = "Should public network access be enabled for the Web App."
 }
 
-variable "contoso_webapp_options" {
-  type = object({
-    contoso_active_directory_tenant_id      = string
-    contoso_active_directory_client_id      = string
-    contoso_active_directory_client_secret  = string
-
-    postgresql_database_url       = string
-    postgresql_database_user      = string
-    postgresql_database_password  = string
-
-    redis_host_name               = string
-    redis_port                    = number
-    redis_password                = string
-
-    service_bus_namespace               = string
-    service_bus_email_request_queue     = string
-    service_bus_email_response_queue    = string
-
-    storage_account_name          = string
-    storage_container_name        = string
-  })
-
-  description = "The options for the webapp"
+variable "app_config_connection_string" {
+  type = string
+  description = "Connection string to the App Configuration"
 }
 
 variable "service_management_reference" {

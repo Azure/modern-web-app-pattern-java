@@ -57,26 +57,64 @@ locals {
   #####################################
   front_door_sku_name = var.environment == "prod" ? "Premium_AzureFrontDoor" : "Standard_AzureFrontDoor"
   postgresql_sku_name = var.environment == "prod" ? "GP_Standard_D4s_v3" : "B_Standard_B1ms"
-  azconfig_keys = var.environment == "prod" ? concat(
-    [
-      for k, v in module.secrets[0].secret_names : {
-        key                 = k
-        vault_key_reference = v
-        type                = "vault"
-      }
-    ],
-    [
-      for k, v in module.secondary_secrets[0].secret_names : {
-        key                 = k
-        vault_key_reference = v
-        type                = "vault"
-      }
-    ]
-    ) : [
-    for k, v in module.dev_secrets[0].secret_names : {
-      key                 = k
+
+  dev_azconfig_key_mapping = {
+    "dev-contoso-database-url"            = "/${var.application_name}/spring.datasource.url"
+    "dev-contoso-database-admin"          = "/${var.application_name}/spring.datasource.username"
+    "dev-contoso-database-admin-password" = "/${var.application_name}/spring.datasource.password"
+    "dev-contoso-servicebus-namespace"    = "/${var.application_name}/spring.cloud.azure.servicebus.namespace"
+    "dev-contoso-email-request-queue"     = "/${var.application_name}/spring.cloud.stream.bindings.produceemailrequest-out-0.destination"
+    "dev-contoso-email-response-queue"    = "/${var.application_name}/spring.cloud.stream.bindings.consumeemailresponse-in-0.destination"
+    "dev-contoso-storage-account"         = "/${var.application_name}/spring.cloud.azure.storage.blob.account-name"
+    "dev-contoso-storage-container-name"  = "/${var.application_name}/spring.cloud.azure.storage.blob.container-name"
+    "dev-contoso-redis-password"          = "/${var.application_name}/spring.data.redis.password"
+  }
+
+  # Create a map that explicitly ties Key Vault secret names to App Config key paths
+  dev_secret_to_azconfig_mapping = {
+    for k, v in module.dev_secrets[0].secret_names : k => {
+      key                 = local.dev_azconfig_key_mapping[k]
       vault_key_reference = v
+    }
+  }
+
+  # Create the azconfig_keys array from the transformed map
+  dev_azconfig_secret_keys = [
+    for k, v in local.dev_secret_to_azconfig_mapping : {
+      key                 = v.key
+      vault_key_reference = v.vault_key_reference
       type                = "vault"
     }
   ]
+
+  dev_azconfig_non_secret_keys = [
+    {
+      key                 = "/${var.application_name}/spring.cloud.azure.active-directory.profile.tenant-id"
+      vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_tenant_id[0].id
+      type                = "vault"
+    },
+    {
+      key                 = "/${var.application_name}/spring.cloud.azure.active-directory.credential.client-id"
+      vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_client_id[0].id
+      type                = "vault"
+    },
+    {
+      key                 = "/${var.application_name}/spring.cloud.azure.active-directory.credential.client-secret"
+      vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_client_secret[0].id
+      type                = "vault"
+    },
+    {
+      key   = "/${var.application_name}/spring.data.redis.host"
+      value = module.dev_cache[0].cache_hostname
+      type  = "kv"
+    },
+    {
+      key   = "/${var.application_name}/spring.data.redis.port"
+      value = module.dev_cache[0].cache_ssl_port
+      type  = "kv"
+    }
+  ]
+
+  dev_azconfig_keys = concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys)
 }
+
