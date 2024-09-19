@@ -26,8 +26,8 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   capacity                      = var.environment == "prod" ? var.capacity : 0
   premium_messaging_partitions  = var.environment == "prod" ? 1 : 0
   # Should be set to false, but we need it for Keda scaling rules
-  # https://github.com/microsoft/azure-container-apps/issues/592
-  local_auth_enabled = false
+  # https://github.com/hashicorp/terraform-provider-azurerm/issues/26570
+  local_auth_enabled = true
 
   zone_redundant = var.environment == "prod" ? true : false
 
