@@ -70,6 +70,30 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.8.0</version>
+                <executions>
+                  <execution>
+                    <id>copy-agent</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>copy</goal>
+                    </goals>
+                  </execution>
+                </executions>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>com.microsoft.azure</groupId>
+                      <artifactId>applicationinsights-agent</artifactId>
+                      <version>${applicationinsights.version}</version>
+                      <outputDirectory>${project.build.directory}/agent</outputDirectory>
+                      <destFileName>applicationinsights-agent.jar</destFileName>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </plugin>
 		</plugins>
 	</build>
 

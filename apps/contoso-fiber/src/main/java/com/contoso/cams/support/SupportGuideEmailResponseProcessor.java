@@ -29,7 +29,7 @@ public class SupportGuideEmailResponseProcessor {
     Consumer<Message<byte[]>> consumeemailresponse() {
         return message -> {
             Checkpointer checkpointer = (Checkpointer) message.getHeaders().get(CHECKPOINTER);
-            log.info("Received message: {}", message.getPayload());
+            log.info("Received message: {}", new String(message.getPayload()));
 
             EmailResponse emailResponse = parseMessage(message);
 
@@ -43,7 +43,7 @@ public class SupportGuideEmailResponseProcessor {
 
             // Checkpoint after processing the message
             checkpointer.success()
-                .doOnSuccess(s -> log.info("Message '{}' successfully checkpointed", message.getPayload()))
+                .doOnSuccess(s -> log.info("Message '{}' successfully checkpointed", new String(message.getPayload())))
                 .doOnError(e -> log.error("Exception found", e))
                 .block();
         };

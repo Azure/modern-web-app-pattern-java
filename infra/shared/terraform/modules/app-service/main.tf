@@ -97,12 +97,14 @@ resource "azurerm_linux_web_app" "application" {
   sticky_settings {
     app_setting_names = [
       "APPLICATIONINSIGHTS_CONNECTION_STRING",
+      "APPINSIGHTS_INSTRUMENTATIONKEY",
       "ApplicationInsightsAgent_EXTENSION_VERSION"
     ]
   }
 
   app_settings = {
     APPLICATIONINSIGHTS_CONNECTION_STRING = var.app_insights_connection_string
+    APPINSIGHTS_INSTRUMENTATIONKEY = var.app_insights_instrumentation_key
     ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
     APP_CONFIGURATION_CONNECTION_STRING = var.app_config_connection_string
 

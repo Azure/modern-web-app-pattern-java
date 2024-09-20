@@ -24,5 +24,3 @@ services:
     host: containerapp
     docker:
       path: ./Dockerfile
-      buildArgs:
-        - "JAR_FILE=target/email-processor.jar"
