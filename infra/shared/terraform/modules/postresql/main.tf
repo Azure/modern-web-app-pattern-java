@@ -150,7 +150,6 @@ resource "azurerm_postgresql_flexible_server" "dev_postresql_database" {
   version                       = "16"
   geo_redundant_backup_enabled  = false
   storage_mb                    = 32768
-  zone                          = 1
 
   authentication {
       active_directory_auth_enabled  = true
@@ -161,6 +160,12 @@ resource "azurerm_postgresql_flexible_server" "dev_postresql_database" {
   tags = {
       "environment"      = var.environment
       "application-name" = var.application_name
+  }
+
+  lifecycle {
+    ignore_changes = [
+      zone,
+    ]
   }
 }
 
