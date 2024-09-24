@@ -104,10 +104,6 @@ resource "azurerm_linux_web_app" "application" {
     APPINSIGHTS_INSTRUMENTATIONKEY = var.app_insights_instrumentation_key
     ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
 
-    DATABASE_URL      = var.contoso_webapp_options.postgresql_database_url
-    DATABASE_USERNAME = var.contoso_webapp_options.postgresql_database_user
-    DATABASE_PASSWORD = var.contoso_webapp_options.postgresql_database_password
-
     AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID     = var.contoso_webapp_options.contoso_active_directory_client_id
     AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET = var.contoso_webapp_options.contoso_active_directory_client_secret
     AZURE_ACTIVE_DIRECTORY_TENANT_ID                = var.contoso_webapp_options.contoso_active_directory_tenant_id

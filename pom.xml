@@ -6,7 +6,7 @@
     <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.6</version>
+		<version>3.2.8</version>
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
@@ -29,10 +29,10 @@
         <protobuf.version>3.25.3</protobuf.version>
         <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
         <os.maven.plugin.version>1.7.1</os.maven.plugin.version>
-        <version.spring.boot>3.2.5</version.spring.boot>
+        <version.spring.boot>3.2.8</version.spring.boot>
         <commons-lang3.version>3.14.0</commons-lang3.version>
-        <spring-cloud-azure.version>5.12.0</spring-cloud-azure.version>
-		<spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-cloud-azure.version>5.14.0</spring-cloud-azure.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
         <applicationinsights.version>3.5.4</applicationinsights.version>
     </properties>
 
