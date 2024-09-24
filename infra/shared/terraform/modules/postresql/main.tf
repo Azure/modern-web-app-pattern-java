@@ -29,6 +29,7 @@ resource "azurerm_postgresql_flexible_server" "postgresql_database" {
   sku_name                     = var.sku_name
   version                      = "16"
 
+  public_network_access_enabled = false
   delegated_subnet_id          = var.subnet_network_id
   private_dns_zone_id          = var.private_dns_zone_id
 
