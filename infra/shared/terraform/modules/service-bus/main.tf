@@ -29,8 +29,6 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   # https://github.com/microsoft/azure-container-apps/issues/592
   local_auth_enabled = false
 
-  zone_redundant = var.environment == "prod" ? true : false
-
   tags = {
     "environment"      = var.environment
     "application-name" = var.application_name
@@ -49,7 +47,7 @@ resource "azurerm_servicebus_queue" "email_request_queue" {
   name         = azurecaf_name.servicebus_email_request_queue_name.result
   namespace_id = azurerm_servicebus_namespace.servicebus_namespace.id
 
-  enable_partitioning   = false
+  partitioning_enabled = false
   max_delivery_count    = 10
   lock_duration         = "PT30S"
   max_size_in_megabytes = 1024
@@ -69,7 +67,7 @@ resource "azurerm_servicebus_queue" "email_response_queue" {
   name         = azurecaf_name.servicebus_email_response_queue_name.result
   namespace_id = azurerm_servicebus_namespace.servicebus_namespace.id
 
-  enable_partitioning   = false
+  partitioning_enabled   = false
   max_delivery_count    = 10
   lock_duration         = "PT30S"
   max_size_in_megabytes = 1024
