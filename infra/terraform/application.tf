@@ -77,3 +77,21 @@ module "dev_application" {
   public_network_access_enabled    = true
   app_config_connection_string     = module.dev_azconfig[0].azconfig_uri
 }
+
+resource "null_resource" "dev_service_connector" {
+  count               = var.environment == "dev" ? 1 : 0
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "bash ../scripts/setup-service-connector.sh ${module.dev_application[0].web_app_id} ${azurerm_postgresql_flexible_server_database.dev_postresql_database_db[0].id}"
+  }
+
+  depends_on = [
+    module.dev_application,
+    azurerm_postgresql_flexible_server_database.dev_postresql_database_db,
+    azurerm_postgresql_flexible_server_active_directory_administrator.dev-contoso-ad-admin
+  ]
+}
