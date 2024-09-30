@@ -22,8 +22,7 @@ module "application" {
   frontdoor_host_name              = module.frontdoor[0].host_name
   frontdoor_profile_uuid           = module.frontdoor[0].resource_guid
   public_network_access_enabled    = false
-
-  app_config_connection_string = ""
+  app_config_endpoint              = ""
 }
 
 # -----------------------
@@ -46,8 +45,7 @@ module "secondary_application" {
   frontdoor_host_name              = module.frontdoor[0].host_name
   frontdoor_profile_uuid           = module.frontdoor[0].resource_guid
   public_network_access_enabled    = false
-
-  app_config_connection_string = ""
+  app_config_endpoint              = ""
 
 }
 
@@ -75,7 +73,7 @@ module "dev_application" {
   frontdoor_host_name              = module.dev_frontdoor[0].host_name
   frontdoor_profile_uuid           = module.dev_frontdoor[0].resource_guid
   public_network_access_enabled    = true
-  app_config_connection_string     = module.dev_azconfig[0].azconfig_uri
+  app_config_endpoint              = module.dev_azconfig[0].azconfig_uri
 }
 
 resource "null_resource" "dev_service_connector" {

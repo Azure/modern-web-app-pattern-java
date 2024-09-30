@@ -64,9 +64,10 @@ variable "public_network_access_enabled" {
   description = "Should public network access be enabled for the Web App."
 }
 
-variable "app_config_connection_string" {
+variable "app_config_endpoint" {
   type = string
-  description = "Connection string to the App Configuration"
+  description = "The Azure App Configuration URI."
+  
 }
 
 variable "service_management_reference" {
