@@ -207,7 +207,6 @@ module "dev_secrets" {
     azurerm_role_assignment.dev_kv_administrator_user_role_assignement
   ]
   secrets = {
-    "dev-contoso-servicebus-namespace" = module.dev_servicebus[0].namespace_name
     "dev-contoso-email-request-queue" = module.dev_servicebus[0].queue_email_request_name
     "dev-contoso-email-response-queue" = module.dev_servicebus[0].queue_email_response_name
     "dev-contoso-storage-account"    = module.dev_storage[0].storage_account_name

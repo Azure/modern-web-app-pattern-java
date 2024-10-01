@@ -59,12 +59,11 @@ locals {
   postgresql_sku_name = var.environment == "prod" ? "GP_Standard_D4s_v3" : "B_Standard_B1ms"
 
   dev_azconfig_key_mapping = {
-    "dev-contoso-servicebus-namespace"    = "/contoso-fiber/spring.cloud.azure.servicebus.namespace"
-    "dev-contoso-email-request-queue"     = "/contoso-fiber/spring.cloud.stream.bindings.produceemailrequest-out-0.destination"
-    "dev-contoso-email-response-queue"    = "/contoso-fiber/spring.cloud.stream.bindings.consumeemailresponse-in-0.destination"
-    "dev-contoso-storage-account"         = "/contoso-fiber/spring.cloud.azure.storage.blob.account-name"
-    "dev-contoso-storage-container-name"  = "/contoso-fiber/spring.cloud.azure.storage.blob.container-name"
-    "dev-contoso-redis-password"          = "/contoso-fiber/spring.data.redis.password"
+    "dev-contoso-email-request-queue"     = "/contoso-fiber/AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME"
+    "dev-contoso-email-response-queue"    = "/contoso-fiber/AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME"
+    "dev-contoso-storage-account"         = "/contoso-fiber/AZURE_STORAGE_ACCOUNT_NAME"
+    "dev-contoso-storage-container-name"  = "/contoso-fiber/AZURE_STORAGE_CONTAINER_NAME"
+    "dev-contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
   }
 
   # Create a map that explicitly ties Key Vault secret names to App Config key paths
@@ -86,37 +85,42 @@ locals {
 
   dev_azconfig_non_secret_keys = [
     {
-      key                 = "/contoso-fiber/spring.cloud.azure.active-directory.profile.tenant-id"
+      key = "/contoso-fiber/AZURE_SERVICEBUS_NAMESPACE"
+      value = module.dev_servicebus[0].namespace_name
+      type = "kv"
+    },
+    {
+      key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
       vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_tenant_id[0].id
       type                = "vault"
     },
     {
-      key                 = "/contoso-fiber/spring.cloud.azure.active-directory.credential.client-id"
+      key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
       vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_client_id[0].id
       type                = "vault"
     },
     {
-      key                 = "/contoso-fiber/spring.cloud.azure.active-directory.credential.client-secret"
+      key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
       vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_client_secret[0].id
       type                = "vault"
     },
     {
-      key   = "/contoso-fiber/spring.data.redis.host"
+      key   = "/contoso-fiber/REDIS_HOST"
       value = module.dev_cache[0].cache_hostname
       type  = "kv"
     },
     {
-      key   = "/contoso-fiber/spring.data.redis.port"
+      key   = "/contoso-fiber/REDIS_PORT"
       value = module.dev_cache[0].cache_ssl_port
       type  = "kv"
     },
     {
-      key   = "/contoso-fiber/contoso.retry.demo"
+      key   = "/contoso-fiber/CONTOSO_RETRY_DEMO"
       value = "0"
       type  = "kv"
     },
     {
-      key   = "/contoso-fiber/contoso.suport-guide.request.service"
+      key   = "/contoso-fiber/CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE"
       value = "queue"
       type  = "kv"
     }
