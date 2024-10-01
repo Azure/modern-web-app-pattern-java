@@ -17,9 +17,3 @@ output "application_name" {
   value       = azurerm_linux_web_app.application.name
   description = "The name for this Linux Web App"
 }
-
-output "app_service_identity_principal_id" {
-  value       = azurerm_user_assigned_identity.app_service_user_assigned_identity.principal_id
-  description = "The principal id of the identity of the app service"
-
-}

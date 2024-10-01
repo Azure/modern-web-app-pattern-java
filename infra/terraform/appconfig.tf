@@ -49,5 +49,5 @@ module "dev_azconfig" {
   aca_identity_principal_id         = module.dev_aca[0].identity_principal_id
   keys                              = local.dev_azconfig_keys
   spoke_vnet_id                     = null
-  app_service_identity_principal_id = module.dev_application[0].app_service_identity_principal_id
+  app_service_identity_principal_id = module.dev_application[0].application_principal_id
 }

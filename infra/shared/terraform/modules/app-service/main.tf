@@ -51,10 +51,7 @@ resource "azurerm_linux_web_app" "application" {
   virtual_network_subnet_id = var.appsvc_subnet_id
 
   identity {
-    type = "SystemAssigned, UserAssigned"
-    identity_ids = [
-      azurerm_user_assigned_identity.app_service_user_assigned_identity.id
-    ]
+    type = "SystemAssigned"
   }
 
   tags = {
@@ -136,14 +133,6 @@ module "private_endpoint" {
   private_dns_resource_group  = var.private_dns_resource_group
 }
 
-# Create role assignments
-
-resource "azurerm_user_assigned_identity" "app_service_user_assigned_identity" {
-  name                = "AppServiceUserAssignedIdentity"
-  resource_group_name = var.resource_group
-  location            = var.location
-}
-
 # Configure Diagnostic Settings for App Service
 resource "azurerm_monitor_diagnostic_setting" "app_service_diagnostic" {
   name                           = "app-service-diagnostic-settings"
@@ -153,23 +142,11 @@ resource "azurerm_monitor_diagnostic_setting" "app_service_diagnostic" {
 
   enabled_log {
     category_group = "allLogs"
-
-    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
-    # retention_policy {
-    #   days    = 0
-    #   enabled = false
-    # }
   }
 
   metric {
     category = "AllMetrics"
     enabled  = true
-
-    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
-    # retention_policy {
-    #   days    = 0
-    #   enabled = false
-    # }
   }
 }
 
