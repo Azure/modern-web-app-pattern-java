@@ -59,9 +59,6 @@ locals {
   postgresql_sku_name = var.environment == "prod" ? "GP_Standard_D4s_v3" : "B_Standard_B1ms"
 
   dev_azconfig_key_mapping = {
-    "dev-contoso-database-url"            = "/contoso-fiber/spring.datasource.url"
-    "dev-contoso-database-admin"          = "/contoso-fiber/spring.datasource.username"
-    "dev-contoso-database-admin-password" = "/contoso-fiber/spring.datasource.password"
     "dev-contoso-servicebus-namespace"    = "/contoso-fiber/spring.cloud.azure.servicebus.namespace"
     "dev-contoso-email-request-queue"     = "/contoso-fiber/spring.cloud.stream.bindings.produceemailrequest-out-0.destination"
     "dev-contoso-email-response-queue"    = "/contoso-fiber/spring.cloud.stream.bindings.consumeemailresponse-in-0.destination"
@@ -112,7 +109,18 @@ locals {
       key   = "/contoso-fiber/spring.data.redis.port"
       value = module.dev_cache[0].cache_ssl_port
       type  = "kv"
+    },
+    {
+      key   = "/contoso-fiber/contoso.retry.demo"
+      value = "0"
+      type  = "kv"
+    },
+    {
+      key   = "/contoso-fiber/contoso.suport-guide.request.service"
+      value = "queue"
+      type  = "kv"
     }
+
   ]
 
   dev_azconfig_keys = concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys)
