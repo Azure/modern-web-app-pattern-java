@@ -2,7 +2,6 @@ package com.contoso.cams.serviceplan;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 /*
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@RefreshScope
 public class ServicePlanExceptionSimulator {
 
     private static int requestCount = 0;
