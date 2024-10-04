@@ -22,7 +22,7 @@ module "secondary_servicebus" {
   resource_group      = azurerm_resource_group.secondary_spoke[0].name
   application_name    = var.application_name
   environment         = var.environment
-  location            = var.location
+  location            = var.secondary_location
   web_application_principal_id =  module.secondary_application[0].application_principal_id
   container_app_identity_principal_id = module.secondary_aca[0].identity_principal_id
 }
