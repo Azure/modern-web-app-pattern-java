@@ -86,7 +86,7 @@ locals {
   }
 
   # Create a map that explicitly ties Key Vault secret names to App Config key paths
- 
+
   dev_secret_to_azconfig_mapping = var.environment == "dev" ? {
     for k, v in local.dev_azconfig_key_mapping : k => {
       key                 = v
@@ -147,7 +147,7 @@ locals {
 
   ]
 
-  dev_azconfig_non_secret_keys = [
+  dev_azconfig_non_secret_keys = var.environment == "dev"? [
     {
       key = "/contoso-fiber/AZURE_SERVICEBUS_NAMESPACE"
       value = module.dev_servicebus[0].namespace_name
@@ -268,7 +268,7 @@ locals {
 
   ]: null
 
-  dev_azconfig_keys = concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys, local.azconfig_common_keys)
+  dev_azconfig_keys = var.environment == "dev" ? concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys, local.azconfig_common_keys): null
   azconfig_keys = var.environment == "prod" ? concat(local.azconfig_secret_keys, local.azconfig_non_secret_keys, local.azconfig_common_keys): null
   secondary_azconfig_keys = var.environment == "prod" ? concat(local.secondary_azconfig_secret_keys, local.secondary_azconfig_non_secret_keys, local.azconfig_common_keys): null
 }
