@@ -11,7 +11,7 @@ module "acr" {
   environment                = var.environment
   location                   = var.location
   aca_identity_principal_id  = module.aca[0].identity_principal_id
-  private_endpoint_subnet_id = module.spoke_vnet[0].subnets[local.private_link_subnet_name].id
+  private_endpoint_subnet_id = module.hub_vnet[0].subnets[local.private_link_subnet_name].id
   network_rules = {
     default_action = "Allow"
     ip_rules = [
