@@ -132,11 +132,6 @@ output "acr_name" {
   description = "The Azure Container Registry Name."
 }
 
-output "acr_login_server" {
-  value = var.environment == "prod" ? module.acr[0].acr_login_server : module.dev_acr[0].acr_login_server
-  description = "The Azure Container Registry Login Server."
-}
-
 # ----------------------
 #  Storage
 # ----------------------
