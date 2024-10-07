@@ -19,11 +19,6 @@ variable "application_name" {
   description = "The name of your application"
 }
 
-variable "aca_identity_principal_id" {
-  type        = string
-  description = "The principal id of the identity of the container app"
-}
-
 variable "features" {
   type = list(object({
     description = optional(string)

@@ -7,7 +7,7 @@
 module "aca" {
   count                                          = var.environment == "prod" ? 1 : 0
   source                                         = "../shared/terraform/modules/aca"
-  resource_group                                 = var.environment == "prod" ? azurerm_resource_group.spoke[0].name : azurerm_resource_group.dev[0].name
+  resource_group                                 = azurerm_resource_group.spoke[0].name
   application_name                               = var.application_name
   environment                                    = var.environment
   location                                       = var.location
@@ -43,8 +43,6 @@ module "secondary_aca" {
   servicebus_namespace_primary_connection_string = module.secondary_servicebus[0].servicebus_namespace_primary_connection_string
   infrastructure_subnet_id                       = module.secondary_spoke_vnet[0].subnets[local.aca_subnet_name].id
 }
-
-
 
 
 # ----------------------------------------------------------------------------------------------

@@ -88,7 +88,6 @@ module "secrets" {
   secrets = {
     "contoso-database-admin" = module.postresql_database[0].database_username
     "contoso-database-admin-password" = local.database_administrator_password
-    "contoso-database-url"       = "jdbc:postgresql://${module.postresql_database[0].database_fqdn}:5432/${azurerm_postgresql_flexible_server_database.postresql_database[0].name}"
     "contoso-email-request-queue" = module.servicebus[0].queue_email_request_name
     "contoso-email-response-queue" = module.servicebus[0].queue_email_response_name
     "contoso-storage-account"    = module.storage[0].storage_account_name
@@ -157,45 +156,6 @@ resource azurerm_role_assignment dev_app_keyvault_role_assignment {
   principal_id          = module.dev_application[0].application_principal_id
 }
 
-resource "azurerm_key_vault_secret" "dev_contoso_application_tenant_id" {
-  count        = var.environment == "dev" ? 1 : 0
-  name         = "contoso-application-tenant-id"
-  value        = local.contoso_tenant_id
-  key_vault_id = module.dev_key_vault[0].vault_id
-  depends_on = [
-    azurerm_role_assignment.dev_kv_administrator_user_role_assignement
-  ]
-}
-
-resource "azurerm_key_vault_secret" "dev_contoso_application_client_id" {
-  count        = var.environment == "dev" ? 1 : 0
-  name         = "contoso-application-client-id"
-  value        = local.dev_contoso_client_id
-  key_vault_id = module.dev_key_vault[0].vault_id
-  depends_on = [
-    azurerm_role_assignment.dev_kv_administrator_user_role_assignement
-  ]
-}
-
-resource "azurerm_key_vault_secret" "dev_contoso_application_client_secret" {
-  count        = var.environment == "dev" ? 1 : 0
-  name         = "contoso-application-client-secret"
-  value        = module.dev_ad[0].application_client_secret
-  key_vault_id = module.dev_key_vault[0].vault_id
-  depends_on = [
-    azurerm_role_assignment.dev_kv_administrator_user_role_assignement
-  ]
-}
-
-resource "azurerm_key_vault_secret" "dev_contoso_app_insights_connection_string" {
-  count        = var.environment == "dev" ? 1 : 0
-  name         = "contoso-app-insights-connection-string"
-  value        = module.dev_app_insights[0].connection_string
-  key_vault_id = module.dev_key_vault[0].vault_id
-  depends_on = [
-    azurerm_role_assignment.dev_kv_administrator_user_role_assignement
-  ]
-}
 
 module "dev_secrets" {
   count        = var.environment == "dev" ? 1 : 0
@@ -205,10 +165,12 @@ module "dev_secrets" {
     azurerm_role_assignment.dev_kv_administrator_user_role_assignement
   ]
   secrets = {
-    "dev-contoso-email-request-queue" = module.dev_servicebus[0].queue_email_request_name
-    "dev-contoso-email-response-queue" = module.dev_servicebus[0].queue_email_response_name
-    "dev-contoso-storage-account"    = module.dev_storage[0].storage_account_name
-    "dev-contoso-storage-container-name" = module.dev_storage[0].storage_container_name
+    "dev-contoso-application-tenant-id" = local.contoso_tenant_id
+    "dev-contoso-application-client-id" = local.dev_contoso_client_id
+    "dev-contoso-application-client-secret" = module.dev_ad[0].application_client_secret
+    "dev-contoso-database-admin" = module.dev_postresql_database[0].database_username
+    "dev-contoso-database-admin-password" = local.database_administrator_password
+    "dev-contoso-app-insights-connection-string" = module.dev_app_insights[0].connection_string
     "dev-contoso-redis-password"     = module.dev_cache[0].cache_secret
   }
 }
