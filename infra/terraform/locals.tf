@@ -59,18 +59,17 @@ locals {
   postgresql_sku_name = var.environment == "prod" ? "GP_Standard_D4s_v3" : "B_Standard_B1ms"
 
   dev_azconfig_key_mapping = {
-    "dev-contoso-email-request-queue"     = "/contoso-fiber/AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME"
-    "dev-contoso-email-response-queue"    = "/contoso-fiber/AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME"
-    "dev-contoso-storage-account"         = "/contoso-fiber/AZURE_STORAGE_ACCOUNT_NAME"
-    "dev-contoso-storage-container-name"  = "/contoso-fiber/AZURE_STORAGE_CONTAINER_NAME"
-    "dev-contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
+    "dev-contoso-application-tenant-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
+    "dev-contoso-application-client-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
+    "dev-contoso-application-client-secret"  = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
+    "dev-contoso-redis-password"             = "/contoso-fiber/REDIS_PASSWORD"
   }
 
   # Create a map that explicitly ties Key Vault secret names to App Config key paths
   dev_secret_to_azconfig_mapping = {
-    for k, v in module.dev_secrets[0].secret_names : k => {
-      key                 = local.dev_azconfig_key_mapping[k]
-      vault_key_reference = v
+    for k, v in local.dev_azconfig_key_mapping : k => {
+      key                 = v
+      vault_key_reference = module.dev_secrets[0].secret_names[k]
     }
   }
 
@@ -83,37 +82,7 @@ locals {
     }
   ]
 
-  dev_azconfig_non_secret_keys = [
-    {
-      key = "/contoso-fiber/AZURE_SERVICEBUS_NAMESPACE"
-      value = module.dev_servicebus[0].namespace_name
-      type = "kv"
-    },
-    {
-      key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
-      vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_tenant_id[0].id
-      type                = "vault"
-    },
-    {
-      key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
-      vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_client_id[0].id
-      type                = "vault"
-    },
-    {
-      key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
-      vault_key_reference = azurerm_key_vault_secret.dev_contoso_application_client_secret[0].id
-      type                = "vault"
-    },
-    {
-      key   = "/contoso-fiber/REDIS_HOST"
-      value = module.dev_cache[0].cache_hostname
-      type  = "kv"
-    },
-    {
-      key   = "/contoso-fiber/REDIS_PORT"
-      value = module.dev_cache[0].cache_ssl_port
-      type  = "kv"
-    },
+  azconfig_common_keys = [
     {
       key   = "/contoso-fiber/CONTOSO_RETRY_DEMO"
       value = "0"
@@ -127,6 +96,44 @@ locals {
 
   ]
 
-  dev_azconfig_keys = concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys)
+  dev_azconfig_non_secret_keys = [
+    {
+      key = "/contoso-fiber/AZURE_SERVICEBUS_NAMESPACE"
+      value = module.dev_servicebus[0].namespace_name
+      type = "kv"
+    },
+    {
+      key   = "/contoso-fiber/REDIS_HOST"
+      value = module.dev_cache[0].cache_hostname
+      type  = "kv"
+    },
+    {
+      key   = "/contoso-fiber/REDIS_PORT"
+      value = module.dev_cache[0].cache_ssl_port
+      type  = "kv"
+    },
+    {
+      key = "/contoso-fiber/AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME"
+      value = module.dev_servicebus[0].queue_email_request_name
+      type = "kv"
+    },
+    {
+      key = "/contoso-fiber/AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME"
+      value = module.dev_servicebus[0].queue_email_response_name
+      type = "kv"
+    },
+    {
+      key = "/contoso-fiber/AZURE_STORAGE_ACCOUNT_NAME"
+      value = module.dev_storage[0].storage_account_name
+      type = "kv"
+    },
+    {
+      key = "/contoso-fiber/AZURE_STORAGE_CONTAINER_NAME"
+      value = module.dev_storage[0].storage_container_name
+      type = "kv"
+    }
+  ]
+
+  dev_azconfig_keys = concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys, local.azconfig_common_keys)
 }
 
