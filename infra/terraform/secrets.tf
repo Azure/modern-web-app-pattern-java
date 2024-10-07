@@ -89,7 +89,6 @@ module "secrets" {
     "contoso-database-admin" = module.postresql_database[0].database_username
     "contoso-database-admin-password" = local.database_administrator_password
     "contoso-database-url"       = "jdbc:postgresql://${module.postresql_database[0].database_fqdn}:5432/${azurerm_postgresql_flexible_server_database.postresql_database[0].name}"
-    "contoso-servicebus-namespace" = module.servicebus[0].namespace_name
     "contoso-email-request-queue" = module.servicebus[0].queue_email_request_name
     "contoso-email-response-queue" = module.servicebus[0].queue_email_response_name
     "contoso-storage-account"    = module.storage[0].storage_account_name
@@ -103,7 +102,7 @@ module "secrets" {
 # 2nd region
 # ----------------------------------------------------------------------------------------------
 module "secondary_secrets" {
-  count        = var.environment == "prod" ? 1 : 0                 
+  count        = var.environment == "prod" ? 1 : 0
   source       = "../shared/terraform/modules/secrets"
   key_vault_id = module.hub_key_vault[0].vault_id
   depends_on = [
@@ -113,7 +112,6 @@ module "secondary_secrets" {
   "secondary-contoso-database-url"       = "jdbc:postgresql://${module.secondary_postresql_database[0].database_fqdn}:5432/${azurerm_postgresql_flexible_server_database.postresql_database[0].name}"
   "secondary-contoso-database-admin" = module.secondary_postresql_database[0].database_username
   "secondary-contoso-database-admin-password" = local.database_administrator_password
-  "secondary-contoso-servicebus-namespace" = module.secondary_servicebus[0].namespace_name
   "secondary-contoso-email-request-queue" = module.secondary_servicebus[0].queue_email_request_name
   "secondary-contoso-email-response-queue" = module.secondary_servicebus[0].queue_email_response_name
   "secondary-contoso-storage-account"    = module.secondary_storage[0].storage_account_name

@@ -41,7 +41,7 @@ locals {
   aca_subnet_name = "aca"
 
   spoke_vnet_cidr                = ["10.240.0.0/20"]
-  subnetPrefixes = [ for i in range(0, 16): cidrsubnet("10.240.0.0/20", 26, i)]
+  subnetPrefixes = [ for i in range(0, 16): cidrsubnet("10.240.0.0/20", 6, i)]
 
 #   appsvc_subnet_cidr             = ["10.240.0.0/26"]
 #   front_door_subnet_cidr         = ["10.240.0.64/26"]
@@ -51,7 +51,7 @@ locals {
 
   // Network cidrs for secondary region
   secondary_spoke_vnet_cidr                = ["10.241.0.0/20"]
-  secondary_subnetPrefixes = [ for i in range(0, 16): cidrsubnet("10.241.0.0/20", 26, i)]
+  secondary_subnetPrefixes = [ for i in range(0, 16): cidrsubnet("10.241.0.0/20", 6, i)]
 #   secondary_appsvc_subnet_cidr             = ["10.241.0.0/26"]
 #   secondary_front_door_subnet_cidr         = ["10.241.0.64/26"]
 #   secondary_postgresql_subnet_cidr         = ["10.241.0.128/26"]
@@ -78,6 +78,9 @@ locals {
     "contoso-storage-account"         = "/contoso-fiber/AZURE_STORAGE_ACCOUNT_NAME"
     "contoso-storage-container-name"  = "/contoso-fiber/AZURE_STORAGE_CONTAINER_NAME"
     "contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
+    "contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
+    "contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
+    "contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
   }
 
   secondary_azconfig_key_mapping = {
@@ -86,6 +89,9 @@ locals {
     "secondary-contoso-storage-account"         = "/contoso-fiber/AZURE_STORAGE_ACCOUNT_NAME"
     "secondary-contoso-storage-container-name"  = "/contoso-fiber/AZURE_STORAGE_CONTAINER_NAME"
     "secondary-contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
+    "secondary-contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
+    "secondary-contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
+    "secondary-contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
   }
 
   # Create a map that explicitly ties Key Vault secret names to App Config key paths
@@ -231,17 +237,17 @@ locals {
     },
     {
       key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
-      vault_key_reference = azurerm_key_vault_secret.secondary_contoso_application_tenant_id[0].id
+      vault_key_reference = azurerm_key_vault_secret.contoso_application_tenant_id[0].id
       type                = "vault"
     },
     {
       key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
-      vault_key_reference = azurerm_key_vault_secret.secondary_contoso_application_client_id[0].id
+      vault_key_reference = azurerm_key_vault_secret.contoso_application_client_id[0].id
       type                = "vault"
     },
     {
       key                 = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
-      vault_key_reference = azurerm_key_vault_secret.secondary_contoso_application_client_secret[0].id
+      vault_key_reference = azurerm_key_vault_secret.contoso_application_client_secret[0].id
       type                = "vault"
     },
     {
