@@ -20,7 +20,13 @@ This repository contains a collection of patterns and best practices for buildin
 Before deploying, you must be authenticated to Azure and have the appropriate subscription selected. Run the following command to authenticate:
 
 ```shell
-az login --scope https://graph.microsoft.com//.default
+az login
+```
+
+If you have multiple tenants, you can use the following command to log into the tenant:
+
+```shell
+az login --tenant <tenant-id>
 ```
 
 Set the subscription to the one you want to use (you can use [az account list](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list) to list available subscriptions):
@@ -37,6 +43,12 @@ Use the next command to login with the Azure Dev CLI (AZD) tool:
 
 ```pwsh
 azd auth login
+```
+
+If you have multiple tenants, you can use the following command to log into the tenant:
+
+```pwsh
+azd auth login --tenant-id <tenant-id>
 ```
 
 ## Create a new environment

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.contoso.cams.model.ServicePlan;
@@ -17,6 +18,9 @@ public class ServicePlanService {
 
     private final ServicePlanRepository planRepository;
 
+    @Autowired
+    private final ServicePlanExceptionSimulator servicePlanExceptionSimulator;
+
     public List<ServicePlanDto> getServicePlans() {
         List<ServicePlan> servicePlans = planRepository.findAll();
         List<ServicePlanDto> servicePlanDtos = servicePlans.stream()
@@ -29,7 +33,7 @@ public class ServicePlanService {
                 servicePlan.getIsDefault()))
             .collect(Collectors.toList());
 
-        ServicePlanExceptionSimulator.checkAndthrowExceptionIfEnabled(); 
+            servicePlanExceptionSimulator.checkAndthrowExceptionIfEnabled(); 
         
         return servicePlanDtos;
     }

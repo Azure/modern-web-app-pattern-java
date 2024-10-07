@@ -103,28 +103,7 @@ resource "azurerm_linux_web_app" "application" {
     APPLICATIONINSIGHTS_CONNECTION_STRING = var.app_insights_connection_string
     APPINSIGHTS_INSTRUMENTATIONKEY = var.app_insights_instrumentation_key
     ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
-
-    DATABASE_URL      = var.contoso_webapp_options.postgresql_database_url
-    DATABASE_USERNAME = var.contoso_webapp_options.postgresql_database_user
-    DATABASE_PASSWORD = var.contoso_webapp_options.postgresql_database_password
-
-    AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID     = var.contoso_webapp_options.contoso_active_directory_client_id
-    AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET = var.contoso_webapp_options.contoso_active_directory_client_secret
-    AZURE_ACTIVE_DIRECTORY_TENANT_ID                = var.contoso_webapp_options.contoso_active_directory_tenant_id
-
-    REDIS_HOST = var.contoso_webapp_options.redis_host_name
-    REDIS_PORT = var.contoso_webapp_options.redis_port
-    REDIS_PASSWORD = var.contoso_webapp_options.redis_password
-
-    AZURE_SERVICEBUS_NAMESPACE                  = var.contoso_webapp_options.service_bus_namespace
-    AZURE_SERVICEBUS_EMAIL_REQUEST_QUEUE_NAME   = var.contoso_webapp_options.service_bus_email_request_queue
-    AZURE_SERVICEBUS_EMAIL_RESPONSE_QUEUE_NAME  = var.contoso_webapp_options.service_bus_email_response_queue
-
-    AZURE_STORAGE_ACCOUNT_NAME = var.contoso_webapp_options.storage_account_name
-    AZURE_STORAGE_CONTAINER_NAME = var.contoso_webapp_options.storage_container_name
-
-    CONTOSO_RETRY_DEMO = "0"
-    CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE="queue"
+    APP_CONFIGURATION_ENDPOINT = var.app_config_endpoint
   }
 
   logs {
@@ -163,23 +142,11 @@ resource "azurerm_monitor_diagnostic_setting" "app_service_diagnostic" {
 
   enabled_log {
     category_group = "allLogs"
-
-    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
-    # retention_policy {
-    #   days    = 0
-    #   enabled = false
-    # }
   }
 
   metric {
     category = "AllMetrics"
     enabled  = true
-
-    ## `retention_policy` has been deprecated in favor of `azurerm_storage_management_policy` resource - to learn more https://aka.ms/diagnostic_settings_log_retention
-    # retention_policy {
-    #   days    = 0
-    #   enabled = false
-    # }
   }
 }
 

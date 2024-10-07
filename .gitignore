@@ -50,3 +50,7 @@ application-dev.properties
 .terraform/
 *.tfplan
 .DS_Store
+
+# Azure CLI configuration
+az_ssh_config/
+ssh-config

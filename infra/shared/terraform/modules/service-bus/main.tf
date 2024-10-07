@@ -26,10 +26,8 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
   capacity                      = var.environment == "prod" ? var.capacity : 0
   premium_messaging_partitions  = var.environment == "prod" ? 1 : 0
   # Should be set to false, but we need it for Keda scaling rules
-  # https://github.com/microsoft/azure-container-apps/issues/592
-  local_auth_enabled = false
-
-  zone_redundant = var.environment == "prod" ? true : false
+  # https://github.com/hashicorp/terraform-provider-azurerm/issues/26570
+  local_auth_enabled = true
 
   tags = {
     "environment"      = var.environment
@@ -49,7 +47,7 @@ resource "azurerm_servicebus_queue" "email_request_queue" {
   name         = azurecaf_name.servicebus_email_request_queue_name.result
   namespace_id = azurerm_servicebus_namespace.servicebus_namespace.id
 
-  enable_partitioning   = false
+  partitioning_enabled = false
   max_delivery_count    = 10
   lock_duration         = "PT30S"
   max_size_in_megabytes = 1024
@@ -69,7 +67,7 @@ resource "azurerm_servicebus_queue" "email_response_queue" {
   name         = azurecaf_name.servicebus_email_response_queue_name.result
   namespace_id = azurerm_servicebus_namespace.servicebus_namespace.id
 
-  enable_partitioning   = false
+  partitioning_enabled   = false
   max_delivery_count    = 10
   lock_duration         = "PT30S"
   max_size_in_megabytes = 1024

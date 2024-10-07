@@ -207,10 +207,6 @@ module "dev_secrets" {
     azurerm_role_assignment.dev_kv_administrator_user_role_assignement
   ]
   secrets = {
-    "dev-contoso-database-url"       = "jdbc:postgresql://${module.dev_postresql_database[0].dev_database_fqdn}:5432/${azurerm_postgresql_flexible_server_database.dev_postresql_database_db[0].name}"
-    "dev-contoso-database-admin" = module.dev_postresql_database[0].database_username
-    "dev-contoso-database-admin-password" = local.database_administrator_password
-    "dev-contoso-servicebus-namespace" = module.dev_servicebus[0].namespace_name
     "dev-contoso-email-request-queue" = module.dev_servicebus[0].queue_email_request_name
     "dev-contoso-email-response-queue" = module.dev_servicebus[0].queue_email_response_name
     "dev-contoso-storage-account"    = module.dev_storage[0].storage_account_name
