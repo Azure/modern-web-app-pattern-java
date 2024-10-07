@@ -22,7 +22,7 @@ module "application" {
   frontdoor_host_name              = module.frontdoor[0].host_name
   frontdoor_profile_uuid           = module.frontdoor[0].resource_guid
   public_network_access_enabled    = false
-  app_config_endpoint              = ""
+  app_config_endpoint              = module.azconfig[0].azconfig_uri
 }
 
 # -----------------------
@@ -45,7 +45,7 @@ module "secondary_application" {
   frontdoor_host_name              = module.frontdoor[0].host_name
   frontdoor_profile_uuid           = module.frontdoor[0].resource_guid
   public_network_access_enabled    = false
-  app_config_endpoint              = ""
+  app_config_endpoint              = module.secondary_azconfig[0].azconfig_uri
 
 }
 
