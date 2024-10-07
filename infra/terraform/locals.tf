@@ -38,19 +38,25 @@ locals {
   app_service_subnet_name = "serverFarm"
   ingress_subnet_name     = "ingress"
   postgresql_subnet_name  = "fs"
+  aca_subnet_name = "aca"
 
   spoke_vnet_cidr                = ["10.240.0.0/20"]
-  appsvc_subnet_cidr             = ["10.240.0.0/26"]
-  front_door_subnet_cidr         = ["10.240.0.64/26"]
-  postgresql_subnet_cidr         = ["10.240.0.128/26"]
-  spoke_private_link_subnet_cidr = ["10.240.11.0/24"]
+  subnetPrefixes = [ for i in range(0, 16): cidrsubnet("10.240.0.0/20", 26, i)]
+
+#   appsvc_subnet_cidr             = ["10.240.0.0/26"]
+#   front_door_subnet_cidr         = ["10.240.0.64/26"]
+#   postgresql_subnet_cidr         = ["10.240.0.128/26"]
+#   spoke_private_link_subnet_cidr = ["10.240.11.0/24"]
+#   spoke_aca_subnet_cidr          = ["10.240.11.0/24"]
 
   // Network cidrs for secondary region
   secondary_spoke_vnet_cidr                = ["10.241.0.0/20"]
-  secondary_appsvc_subnet_cidr             = ["10.241.0.0/26"]
-  secondary_front_door_subnet_cidr         = ["10.241.0.64/26"]
-  secondary_postgresql_subnet_cidr         = ["10.241.0.128/26"]
-  secondary_spoke_private_link_subnet_cidr = ["10.241.11.0/24"]
+  secondary_subnetPrefixes = [ for i in range(0, 16): cidrsubnet("10.241.0.0/20", 26, i)]
+#   secondary_appsvc_subnet_cidr             = ["10.241.0.0/26"]
+#   secondary_front_door_subnet_cidr         = ["10.241.0.64/26"]
+#   secondary_postgresql_subnet_cidr         = ["10.241.0.128/26"]
+#   secondary_spoke_private_link_subnet_cidr = ["10.241.11.0/24"]
+#   secondary_spoke_aca_subnet_cidr          = ["10.241.11.0/24"]
 
   #####################################
   # Application Configuration Variables

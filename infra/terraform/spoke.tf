@@ -14,7 +14,7 @@ resource "azurecaf_name" "spoke_resource_group" {
 }
 
 # ------------------------------
-#  Primary Spoke Resource Group 
+#  Primary Spoke Resource Group
 # ------------------------------
 
 resource "azurerm_resource_group" "spoke" {
@@ -37,7 +37,7 @@ resource "azurecaf_name" "spoke_vnet_name" {
 }
 
 # --------------------
-#  Primary Spoke VNET 
+#  Primary Spoke VNET
 # --------------------
 
 module "spoke_vnet" {
@@ -52,7 +52,7 @@ module "spoke_vnet" {
   subnets = [
     {
       name              = local.app_service_subnet_name
-      subnet_cidr       = local.appsvc_subnet_cidr
+      subnet_cidr       = local.subnetPrefixes[0]
       service_endpoints = [ "Microsoft.Storage", "Microsoft.KeyVault"]
       delegation = {
         name = "Microsoft.Web/serverFarms"
@@ -64,19 +64,19 @@ module "spoke_vnet" {
     },
     {
       name              = local.ingress_subnet_name
-      subnet_cidr       = local.front_door_subnet_cidr
+      subnet_cidr       = local.subnetPrefixes[1]
       service_endpoints = null
       delegation        = null
     },
     {
       name              = local.private_link_subnet_name
-      subnet_cidr       = local.spoke_private_link_subnet_cidr
+      subnet_cidr       = local.subnetPrefixes[2]
       service_endpoints = null
       delegation        = null
     },
     {
       name = local.postgresql_subnet_name
-      subnet_cidr = local.postgresql_subnet_cidr
+      subnet_cidr = local.subnetPrefixes[3]
 
       service_endpoints = ["Microsoft.Storage"]
 
@@ -87,10 +87,22 @@ module "spoke_vnet" {
           actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
         }
       }
+    },
+    {
+        name = local.aca_subnet_name
+        subnet_cidr = local.subnetPrefixes[4]
+
+        delegation = {
+          name = "Microsoft.App/environments"
+          service_delegation = {
+            name = "Microsoft.App/environments"
+            actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+          }
+        }
     }
   ]
 }
- 
+
 module "peeringSpokeToHub" {
   count               = var.environment == "prod" ? 1 : 0
   source              = "../shared/terraform/modules/networking/peering"
@@ -119,7 +131,7 @@ resource "azurecaf_name" "secondary_spoke_resource_group" {
 }
 
 # --------------------------------
-#  Secondary Spoke Resource Group 
+#  Secondary Spoke Resource Group
 # --------------------------------
 
 resource "azurerm_resource_group" "secondary_spoke" {
@@ -142,7 +154,7 @@ resource "azurecaf_name" "secondary_spoke_vnet_name" {
 }
 
 # ----------------------
-#  Secondary Spoke VNET 
+#  Secondary Spoke VNET
 # ----------------------
 
 module "secondary_spoke_vnet" {
@@ -157,7 +169,7 @@ module "secondary_spoke_vnet" {
   subnets = [
     {
       name              = local.app_service_subnet_name
-      subnet_cidr       = local.secondary_appsvc_subnet_cidr
+      subnet_cidr       = local.secondary_subnetPrefixes[0]
       service_endpoints = [ "Microsoft.Storage", "Microsoft.KeyVault"]
       delegation        = {
         name               = "Microsoft.Web/serverFarms"
@@ -169,19 +181,19 @@ module "secondary_spoke_vnet" {
     },
     {
       name              = local.ingress_subnet_name
-      subnet_cidr       = local.secondary_front_door_subnet_cidr
+      subnet_cidr       = local.secondary_subnetPrefixes[1]
       service_endpoints = null
       delegation        = null
     },
     {
       name              = local.private_link_subnet_name
-      subnet_cidr       = local.secondary_spoke_private_link_subnet_cidr
+      subnet_cidr       = local.secondary_subnetPrefixes[2]
       service_endpoints = null
       delegation        = null
     },
     {
       name              = local.postgresql_subnet_name
-      subnet_cidr       = local.secondary_postgresql_subnet_cidr
+      subnet_cidr       = local.secondary_subnetPrefixes[3]
       service_endpoints = ["Microsoft.Storage"]
       delegation        = {
         name               = "Microsoft.DBforPostgreSQL/flexibleServers"
@@ -190,10 +202,21 @@ module "secondary_spoke_vnet" {
             actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
         }
       }
+    },
+      {
+        name = local.aca_subnet_name
+        subnet_cidr = local.secondary_subnetPrefixes[4]
+        delegation = {
+          name = "Microsoft.App/environments"
+          service_delegation = {
+            name = "Microsoft.App/environments"
+            actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+          }
+        }
     }
   ]
 }
- 
+
 module "peeringSpoke2ToHub" {
   count               = var.environment == "prod" ? 1 : 0
   source              = "../shared/terraform/modules/networking/peering"

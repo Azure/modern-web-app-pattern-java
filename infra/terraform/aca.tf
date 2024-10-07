@@ -19,6 +19,7 @@ module  "aca" {
     app_insights_connection_string = module.hub_app_insights[0].connection_string
     log_analytics_workspace_id  = var.environment == "prod" ? module.hub_app_insights[0].log_analytics_workspace_id:  module.dev_app_insights[0].log_analytics_workspace_id
     servicebus_namespace_primary_connection_string = module.servicebus[0].servicebus_namespace_primary_connection_string
+    infrastructure_subnet_id = module.spoke_vnet[0].subnets[local.aca_subnet_name].id
 }
 
 
@@ -40,6 +41,7 @@ module  "secondary_aca" {
     log_analytics_workspace_id  = module.hub_app_insights[0].log_analytics_workspace_id
     app_insights_connection_string = module.hub_app_insights[0].connection_string
     servicebus_namespace_primary_connection_string = module.secondary_servicebus[0].servicebus_namespace_primary_connection_string
+    infrastructure_subnet_id = module.secondary_spoke_vnet[0].subnets[local.aca_subnet_name].id
 }
 
 
