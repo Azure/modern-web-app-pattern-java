@@ -87,7 +87,7 @@ output "frontdoor_url" {
 // ---------------------------------------------------------------------------
 
 # ---------------------------
-#  Dev - Resource Group Name 
+#  Dev - Resource Group Name
 # ---------------------------
 
 output "dev_resource_group" {
@@ -128,13 +128,8 @@ output "AZURE_CONTAINER_REGISTRY_ENDPOINT" {
 }
 
 output "acr_name" {
-  value = var.environment == "prod" ? module.acr[0].name : module.dev_acr[0].acr_name
+  value = var.environment == "prod" ? module.acr[0].acr_name : module.dev_acr[0].acr_name
   description = "The Azure Container Registry Name."
-}
-
-output "acr_login_server" {
-  value = var.environment == "prod" ? module.acr[0].acr_login_server : module.dev_acr[0].acr_login_server
-  description = "The Azure Container Registry Login Server."
 }
 
 # ----------------------
