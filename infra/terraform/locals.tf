@@ -64,47 +64,47 @@ locals {
   front_door_sku_name = var.environment == "prod" ? "Premium_AzureFrontDoor" : "Standard_AzureFrontDoor"
   postgresql_sku_name = var.environment == "prod" ? "GP_Standard_D4s_v3" : "B_Standard_B1ms"
 
-  dev_azconfig_key_mapping = {
-    "dev-contoso-application-tenant-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
-    "dev-contoso-application-client-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
-    "dev-contoso-application-client-secret"  = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
-    "dev-contoso-redis-password"             = "/contoso-fiber/REDIS_PASSWORD"
-  }
-
   azconfig_key_mapping = {
-    "contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
-    "contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
-    "contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
-    "contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
+    "contoso-application-tenant-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
+    "contoso-application-client-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
+    "contoso-application-client-secret"  = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
+    "contoso-redis-password"             = "/contoso-fiber/REDIS_PASSWORD"
   }
 
-  secondary_azconfig_key_mapping = {
-    "secondary-contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
-    "secondary-contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
-    "secondary-contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
-    "secondary-contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
-  }
+  #azconfig_key_mapping = {
+  #  "contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
+  #  "contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
+  #  "contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
+  #  "contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
+  #}
+
+  #secondary_azconfig_key_mapping = {
+  #  "secondary-contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
+  #  "secondary-contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
+  #  "secondary-contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
+  #  "secondary-contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
+  #}
 
   # Create a map that explicitly ties Key Vault secret names to App Config key paths
 
   dev_secret_to_azconfig_mapping = var.environment == "dev" ? {
-    for k, v in local.dev_azconfig_key_mapping : k => {
+    for k, v in local.azconfig_key_mapping : k => {
       key                 = v
       vault_key_reference = module.dev_secrets[0].secret_names[k]
     }
   }: null
 
-   secret_to_azconfig_mapping = var.environment == "prod" ?{
+   primary_secret_to_azconfig_mapping = var.environment == "prod" ?{
     for k, v in local.azconfig_key_mapping : k => {
-      key                 = module.secrets[0].secret_names[k]
-      vault_key_reference = v
+      key                 = v
+      vault_key_reference = module.secrets[0].secret_names[k]
     }
   }: null
 
    secondary_secret_to_azconfig_mapping = var.environment == "prod" ?{
-    for k, v in local.secondary_azconfig_key_mapping : k => {
-      key                 = module.secondary_secrets[0].secret_names[k]
-      vault_key_reference = v
+    for k, v in local.azconfig_key_mapping : k => {
+      key                 = v
+      vault_key_reference = module.secondary_secrets[0].secret_names[k]
     }
   }: null
 
@@ -117,8 +117,8 @@ locals {
     }
   ]: null
 
-  azconfig_secret_keys = var.environment == "prod" ? [
-    for k, v in local.secret_to_azconfig_mapping : {
+  primary_azconfig_secret_keys = var.environment == "prod" ? [
+    for k, v in local.primary_secret_to_azconfig_mapping : {
       key                 = v.key
       vault_key_reference = v.vault_key_reference
       type                = "vault"
@@ -126,7 +126,7 @@ locals {
   ]: null
 
   secondary_azconfig_secret_keys = var.environment == "prod" ?[
-    for k, v in local.secret_to_azconfig_mapping : {
+    for k, v in local.secondary_secret_to_azconfig_mapping : {
       key                 = v.key
       vault_key_reference = v.vault_key_reference
       type                = "vault"
@@ -144,7 +144,6 @@ locals {
       value = "queue"
       type  = "kv"
     }
-
   ]
 
   dev_azconfig_non_secret_keys = var.environment == "dev"? [
@@ -185,7 +184,7 @@ locals {
     }
   ]: null
 
-  azconfig_non_secret_keys = var.environment == "prod" ?[
+  primary_azconfig_non_secret_keys = var.environment == "prod" ?[
     {
       key = "/contoso-fiber/AZURE_SERVICEBUS_NAMESPACE"
       value = module.servicebus[0].namespace_name
@@ -269,7 +268,7 @@ locals {
   ]: null
 
   dev_azconfig_keys = var.environment == "dev" ? concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys, local.azconfig_common_keys): null
-  azconfig_keys = var.environment == "prod" ? concat(local.azconfig_secret_keys, local.azconfig_non_secret_keys, local.azconfig_common_keys): null
+  primary_azconfig_keys = var.environment == "prod" ? concat(local.primary_azconfig_secret_keys, local.primary_azconfig_non_secret_keys, local.azconfig_common_keys): null
   secondary_azconfig_keys = var.environment == "prod" ? concat(local.secondary_azconfig_secret_keys, local.secondary_azconfig_non_secret_keys, local.azconfig_common_keys): null
 }
 
