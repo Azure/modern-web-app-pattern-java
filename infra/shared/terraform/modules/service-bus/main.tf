@@ -12,7 +12,7 @@ data "azuread_client_config" "current" {}
 resource "azurecaf_name" "servicebus_namespace_name" {
   name          = var.application_name
   resource_type = "azurerm_servicebus_namespace"
-  suffixes      = [var.environment]
+  suffixes      = [var.location, var.environment]
 }
 
 # Create Service Bus namespace

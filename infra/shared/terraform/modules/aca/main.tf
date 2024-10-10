@@ -11,7 +11,7 @@ terraform {
 resource "azurecaf_name" "container_app_environment_name" {
   name          = var.application_name
   resource_type = "azurerm_container_app_environment"
-  suffixes      = [var.environment]
+  suffixes      = [var.location, var.environment]
 }
 
 # Create Azure Container Apps Environment in Dev

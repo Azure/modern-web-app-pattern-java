@@ -13,7 +13,7 @@ data "azuread_client_config" "current" {}
 resource "azurecaf_name" "azurerm_app_config" {
   name          = var.application_name
   resource_type = "azurerm_app_configuration"
-  suffixes      = [var.environment]
+  suffixes      = [var.location, var.environment]
 }
 
 # Create Azure App Configuration
