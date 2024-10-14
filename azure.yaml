@@ -2,7 +2,7 @@
 
 name: modern-java-web
 metadata:
-  template: modern-java-web@1.1.0
+  template: modern-java-web@1.0.0
 infra:
     provider: "terraform"
     path: "./infra/terraform"
