@@ -10,7 +10,7 @@ locals {
     "environment"      = var.environment
     "application-name" = var.application_name
     "contoso-version"  = "1.0"
-    "app-pattern-name" = "java-rwa"
+    "app-pattern-name" = "java-mwa"
     "azd-env-name"     = var.application_name
   }
 
