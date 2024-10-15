@@ -39,31 +39,6 @@ module "secrets" {
 }
 
 
-# ----------------------------------------------------------------------------------------------
-# 2nd region
-# ----------------------------------------------------------------------------------------------
-module "secondary_secrets" {
-  count        = var.environment == "prod" ? 1 : 0
-  source       = "../shared/terraform/modules/secrets"
-  key_vault_id = module.hub_key_vault[0].vault_id
-  depends_on = [
-      azurerm_role_assignment.kv_administrator_user_role_assignement
-    ]
-  secrets = {
-  "contoso-application-tenant-id"          = local.contoso_tenant_id
-    "contoso-application-tenant-id"          = local.contoso_tenant_id
-    "contoso-application-client-id"          = local.prod_contoso_client_id
-    "contoso-application-client-secret"      = module.ad[0].application_client_secret
-    "contoso-database-admin"                 = module.secondary_postresql_database[0].database_username
-    "contoso-database-admin-password"        = local.database_administrator_password
-    "contoso-app-insights-connection-string" = module.hub_app_insights[0].connection_string
-    "contoso-redis-password"                 = module.secondary_cache[0].cache_secret
-    "contoso-jumpbox-username"               = var.jumpbox_username
-    "contoso-jumpbox-password"               = random_password.jumpbox_password.result
-  }
-}
-
-
 # Give the app access to the key vault secrets - https://learn.microsoft.com/azure/key-vault/general/rbac-guide?tabs=azure-cli#secret-scope-role-assignment
 resource azurerm_role_assignment app_keyvault_role_assignment {
   count                 = var.environment == "prod" ? 1 : 0
