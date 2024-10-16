@@ -24,7 +24,7 @@ variable "ip_rules" {
   type        = list(string)
 }
 
-variable "principal_id" {
-  description = "The principal ID for role assignments."
+variable "account_replication_type" {
   type        = string
+  description = "The type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS"
 }

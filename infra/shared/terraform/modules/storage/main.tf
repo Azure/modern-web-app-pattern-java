@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "sa" {
   location                 = var.location
   account_kind             = "StorageV2"
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = var.account_replication_type
   shared_access_key_enabled = false
 
   identity {
@@ -47,18 +47,6 @@ resource "azurerm_role_assignment" "storage_blob_data_owner" {
   scope                = azurerm_storage_account.sa.id
   role_definition_name = "Storage Blob Data Owner"
   principal_id         = data.azuread_client_config.current.object_id
-}
-
-resource "azurerm_role_assignment" "storage_container_app_data_contributor" {
-  scope                = azurerm_storage_account.sa.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = var.principal_id
-}
-
-resource "azurerm_role_assignment" "app_storage_blob_data_owner" {
-  scope                = azurerm_storage_account.sa.id
-  role_definition_name = "Storage Blob Data Owner"
-  principal_id         = var.principal_id
 }
 
 resource "azurecaf_name" "app_storage_container" {
