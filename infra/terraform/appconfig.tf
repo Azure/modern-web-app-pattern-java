@@ -11,7 +11,7 @@ module "azconfig" {
   environment                       = var.environment
   location                          = var.location
   spoke_vnet_id                     = module.spoke_vnet[0].vnet_id
-  keys                              = local.primary_azconfig_keys
+  keys                              = []
   private_endpoint_subnet_id        = module.spoke_vnet[0].subnets[local.private_link_subnet_name].id
   app_service_identity_principal_id = module.application[0].application_principal_id
 }
@@ -28,7 +28,7 @@ module "secondary_azconfig" {
   environment                       = var.environment
   location                          = var.secondary_location
   spoke_vnet_id                     = module.secondary_spoke_vnet[0].vnet_id
-  keys                              = local.secondary_azconfig_keys
+  keys                              = []
   private_endpoint_subnet_id        = module.secondary_spoke_vnet[0].subnets[local.private_link_subnet_name].id
   app_service_identity_principal_id = module.secondary_application[0].application_principal_id
 }

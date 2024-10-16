@@ -64,26 +64,17 @@ locals {
   front_door_sku_name = var.environment == "prod" ? "Premium_AzureFrontDoor" : "Standard_AzureFrontDoor"
   postgresql_sku_name = var.environment == "prod" ? "GP_Standard_D4s_v3" : "B_Standard_B1ms"
 
+  #####################################
+  # Storage account configuration variables
+  #####################################
+  account_replication_type = var.environment == "prod" ? "GZRS" : "ZRS"
+
   azconfig_key_mapping = {
     "contoso-application-tenant-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_TENANT_ID"
     "contoso-application-client-id"      = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_ID"
     "contoso-application-client-secret"  = "/contoso-fiber/AZURE_ACTIVE_DIRECTORY_CREDENTIAL_CLIENT_SECRET"
     "contoso-redis-password"             = "/contoso-fiber/REDIS_PASSWORD"
   }
-
-  #azconfig_key_mapping = {
-  #  "contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
-  #  "contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
-  #  "contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
-  #  "contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
-  #}
-
-  #secondary_azconfig_key_mapping = {
-  #  "secondary-contoso-redis-password"          = "/contoso-fiber/REDIS_PASSWORD"
-  #  "secondary-contoso-database-url"            = "/contoso-fiber/DATABASE_URL"
-  #  "secondary-contoso-database-admin"          = "/contoso-fiber/DATABASE_ADMIN"
-  #  "secondary-contoso-database-admin-password" = "/contoso-fiber/DATABASE_ADMIN_PASSWORD"
-  #}
 
   # Create a map that explicitly ties Key Vault secret names to App Config key paths
 
@@ -101,13 +92,6 @@ locals {
     }
   }: null
 
-   secondary_secret_to_azconfig_mapping = var.environment == "prod" ?{
-    for k, v in local.azconfig_key_mapping : k => {
-      key                 = v
-      vault_key_reference = module.secondary_secrets[0].secret_names[k]
-    }
-  }: null
-
   # Create the azconfig_keys array from the transformed map
   dev_azconfig_secret_keys = var.environment == "dev" ?[
     for k, v in local.dev_secret_to_azconfig_mapping : {
@@ -117,16 +101,8 @@ locals {
     }
   ]: null
 
-  primary_azconfig_secret_keys = var.environment == "prod" ? [
+  prod_azconfig_secret_keys = var.environment == "prod" ? [
     for k, v in local.primary_secret_to_azconfig_mapping : {
-      key                 = v.key
-      vault_key_reference = v.vault_key_reference
-      type                = "vault"
-    }
-  ]: null
-
-  secondary_azconfig_secret_keys = var.environment == "prod" ?[
-    for k, v in local.secondary_secret_to_azconfig_mapping : {
       key                 = v.key
       vault_key_reference = v.vault_key_reference
       type                = "vault"
@@ -229,11 +205,6 @@ locals {
       value = module.secondary_servicebus[0].namespace_name
       type = "kv"
     },
-   {
-      key = "/contoso-fiber/AZURE_SERVICEBUS_NAMESPACE"
-      value = module.secondary_servicebus[0].namespace_name
-      type = "kv"
-    },
     {
       key   = "/contoso-fiber/REDIS_HOST"
       value = module.secondary_cache[0].cache_hostname
@@ -256,19 +227,19 @@ locals {
     },
     {
       key = "/contoso-fiber/AZURE_STORAGE_ACCOUNT_NAME"
-      value = module.secondary_storage[0].storage_account_name
+      value = module.storage[0].storage_account_name
       type = "kv"
     },
     {
       key = "/contoso-fiber/AZURE_STORAGE_CONTAINER_NAME"
-      value = module.secondary_storage[0].storage_container_name
+      value = module.storage[0].storage_container_name
       type = "kv"
     }
 
   ]: null
 
   dev_azconfig_keys = var.environment == "dev" ? concat(local.dev_azconfig_secret_keys, local.dev_azconfig_non_secret_keys, local.azconfig_common_keys): null
-  primary_azconfig_keys = var.environment == "prod" ? concat(local.primary_azconfig_secret_keys, local.primary_azconfig_non_secret_keys, local.azconfig_common_keys): null
-  secondary_azconfig_keys = var.environment == "prod" ? concat(local.secondary_azconfig_secret_keys, local.secondary_azconfig_non_secret_keys, local.azconfig_common_keys): null
+  primary_azconfig_keys = var.environment == "prod" ? concat(local.prod_azconfig_secret_keys, local.primary_azconfig_non_secret_keys, local.azconfig_common_keys): null
+  secondary_azconfig_keys = var.environment == "prod" ? concat(local.prod_azconfig_secret_keys, local.secondary_azconfig_non_secret_keys, local.azconfig_common_keys): null
 }
 
