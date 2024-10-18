@@ -278,6 +278,19 @@ The following detailed deployment steps assume you are using a Dev Container ins
     terraform apply tfplan
     ```
 
+1. Verify that the keys were created.
+
+    ```shell
+    az appconfig kv list -n <app config name>
+    ```
+
+    For example:
+
+    ```shell
+    az appconfig kv list -n appcg-nickd13mwa-eastus2-prod --auth-mode login
+    az appconfig kv list -n appcg-nickd13mwa-canadacentral-prod --auth-mode login
+    ```
+
 1. Change to the home directory
 
     ```shell
