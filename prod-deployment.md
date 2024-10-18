@@ -143,17 +143,48 @@ The following detailed deployment steps assume you are using a Dev Container ins
     azd env get-values --output json | jq -r .secondary_app_config_keys
     ```
 
-### 3. Build Contoso Fiber CAMS
+### 4. Build Contoso Fiber CAMS
 
 1. Run the following command to build the Contoso Fiber application:
 
     ```shell
-    ./mvnw clean package
+    ./mvnw clean install
     ```
 
     This will create the jar file `cams.jar` in the `src/contoso-fiber/target/` directory. This file will be used to deploy the application to Azure App Service.
 
-### 4. Upload the code to the jump box
+### 5. Build the Email Processor Docker image
+
+
+1. Build the docker image
+
+    ```shell
+    target_image=modern-java-web/email-processor:1.0.0
+    docker build -f apps/email-processor/Dockerfile -t $target_image ./apps/email-processor/
+    ```
+
+1. Save the docker image to a file
+
+    ```shell
+    target_image_file=modern-java-web-email-processor-1.0.0.tar
+    docker save -o $target_image_file $target_image
+    ```
+
+1. Set the following environment variables. The values will be used on the jumpbox.
+
+    ```shell
+    container_registry=$(azd env get-values --output json | jq -r .AZURE_CONTAINER_REGISTRY_ENDPOINT)
+    primary_resource_group=$(azd env get-values --output json | jq -r .primary_spoke_resource_group)
+    secondary_resource_group=$(azd env get-values --output json | jq -r .secondary_spoke_resource_group)
+    ```
+
+    ```shell
+    echo $container_registry
+    echo $primary_resource_group
+    echo $secondary_resource_group
+    ```
+
+### 6. Upload the code to the jump box
 
 1. Start a *new* terminal in the dev container
 
@@ -195,10 +226,16 @@ The following detailed deployment steps assume you are using a Dev Container ins
     rsync -av -e "ssh -F ./ssh-config -p 50022" infra/terraform-appconfig/ 127.0.0.1:~/terraform-appconfig
     ```
 
-1. From the first terminal, use the following command to upload the code to the jump box. 
+1. From the first terminal, use the following command to upload CAMS to the jump box. 
 
     ```shell
-    rsync -av -e "ssh -F ./ssh-config -p 50022" src/contoso-fiber/target/cams.jar 127.0.0.1:~/cams.jar
+    rsync -av -e "ssh -F ./ssh-config -p 50022" apps/contoso-fiber/target/cams.jar 127.0.0.1:~/cams.jar
+    ```
+
+1. From the first terminal, use the following command to upload the email processor docker image to the jump box. 
+
+    ```shell
+    rsync -av -e "ssh -F ./ssh-config -p 50022" ./$target_image_file 127.0.0.1:~/$target_image_file
     ```
 
 1. Run the following command to start a shell session on the jump box:
@@ -207,7 +244,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     az ssh vm --ip 127.0.0.1 --port 50022
     ```
 
-### 5. Log in to Azure from the jump box
+### 7. Log in to Azure from the jump box
 
 1. Run the following command to log in to Azure from the 1. Login into Azure using:
 
@@ -227,16 +264,28 @@ The following detailed deployment steps assume you are using a Dev Container ins
     az account set --subscription <subscription_id>
     ```
 
-### 6. Create the App Config keys
+### 8. Create the App Config keys
 
-```bash
-cd terraform-appconfig
-terraform init
-terraform plan -out tfplan
-terraform apply tfplan 
-```
+1. Apply Terraform plan
 
-### 7. Configure Microsoft Entra authentication with Azure Database for PostgreSQL - Flexible Server
+    ```shell
+    cd ~/terraform-appconfig
+    ```
+
+    ```bash
+    terraform init
+    terraform plan -out tfplan
+    terraform apply tfplan
+    ```
+
+1. Change to the home directory
+
+    ```shell
+    cd
+    ```
+
+
+### 9. Configure Microsoft Entra authentication with Azure Database for PostgreSQL - Flexible Server
 
 We will now configure the Contoso Fiber application to use Microsoft Entra authentication with Azure Database for PostgreSQL - Flexible Server. For more information, see [Tutorial: Create a passwordless connection to a database service via Service Connector](https://learn.microsoft.com/azure/service-connector/tutorial-passwordless?tabs=user%2Cjava%2Csql-me-id-dotnet%2Cappservice&pivots=postgresql)
 
@@ -256,7 +305,7 @@ az webapp connection create postgres-flexible \
     --system-identity
 ```
 
-### 8. Deploy code from the jump box
+### 10. Deploy code from the jump box
 
 1. Deploy the application to the primary region using:
 
@@ -274,14 +323,86 @@ az webapp connection create postgres-flexible \
     >
     > In some scenarios, the DNS entries for resources secured with Private Endpoint may have been cached incorrectly. It can take up to 10-minutes for the DNS cache to expire.
 
-1. Navigate to the Front Door URL in a browser to view the Contoso Fiber CAMS application.
+### 11. Deploy the email processor Docker image to Azure Container Registry
 
-    ![Image of the account details page](docs/assets/contoso-account-details-page.png)
+1. Add your user to the docker group
+
+    ```shell
+    sudo usermod -aG docker $(id -u -n)
+    ```
+
+1. Restart the ssh connection to pick up the new group membership
+
+    ```shell
+    exit 
+    az ssh vm --ip 127.0.0.1 --port 50022
+    ```
+
+1. Load the docker image.
+
+    ```shell
+    docker image load --input <target_image_file>
+    ```
+
+    Example:
+
+    ```
+    $ docker image load --input modern-java-web-email-processor-1.0.0.tar 
+    Loaded image: modern-java-web/email-processor:1.0.0
+    
+    $ docker images
+    REPOSITORY                        TAG       IMAGE ID       CREATED       SIZE
+    modern-java-web/email-processor   1.0.0     03bcdf5a0c8c   3 hours ago   531MB
+    ```
+
+1. Tag the image.
+
+    ```shell
+    email_processor_image=<container_registry>/<target_image>
+    docker tag $target_image $email_processor_image
+    ```
+
+    Example:
+
+    ```
+    $ email_processor_image=crnickdala34mwaprod.azurecr.io/modern-java-web/email-processor:1.0.0
+
+    $ docker tag modern-java-web/email-processor:1.0.0 $email_processor_image
+
+    $ docker images
+    REPOSITORY                                            TAG       IMAGE ID       CREATED       SIZE
+    crnickdala34mwaprod.azurecr.io/modern-java-web/email-processor   1.0.0     03bcdf5a0c8c   3 hours ago   531MB
+    modern-java-web/email-processor                       1.0.0     03bcdf5a0c8c   3 hours ago   531MB
+    ```
+
+1. Log into ACR
+
+    ```shell
+    az acr login -n <container_registry>
+    ```
+
+1. Push the image to ACR
+
+    ```shell
+    docker push $email_processor_image
+    ```
+
+1. Update the container app with the new image
+
+    ```shell
+    az containerapp update -n email-processor -g $primary_spoke_resource_group --image $email_processor_image
+    az containerapp update -n email-processor -g $secondary_spoke_resource_group --image $email_processor_image
+    ```
+
+
+### 13. View the APP
+
+1. Navigate to the Front Door URL in a browser to view the Contoso Fiber CAMS application.
 
     > You can learn more about the web app by reading the [Pattern Simulations](demo.md) documentation.
 
 
-### 9. Teardown
+### 14. Teardown
 
 1. Exit the jumpbox using:
 
