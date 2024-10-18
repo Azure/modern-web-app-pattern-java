@@ -235,16 +235,16 @@ The following detailed deployment steps assume you are using a Dev Container ins
 1. From the first terminal, use the following command to upload the email processor docker image to the jump box. 
 
     ```shell
-    rsync -av -e "ssh -F ./ssh-config -p 50022" ./$target_image_file 127.0.0.1:~/$target_image_file
+    rsync -av -e "ssh -F ./ssh-config -p 50022" $target_image_file 127.0.0.1:~/$target_image_file
     ```
+
+### 7. Log in to Azure from the jump box
 
 1. Run the following command to start a shell session on the jump box:
 
     ```shell
     az ssh vm --ip 127.0.0.1 --port 50022
     ```
-
-### 7. Log in to Azure from the jump box
 
 1. Run the following command to log in to Azure from the 1. Login into Azure using:
 
@@ -387,7 +387,7 @@ az webapp connection create postgres-flexible \
     docker push $email_processor_image
     ```
 
-1. Update the container app with the new image
+1. Update the container app with the email processor image
 
     ```shell
     az containerapp update -n email-processor -g $primary_spoke_resource_group --image $email_processor_image
