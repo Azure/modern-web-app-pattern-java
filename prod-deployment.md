@@ -281,7 +281,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
 1. Verify that the keys were created.
 
     ```shell
-    az appconfig kv list -n <app config name>
+    az appconfig kv list -n <app config name> --auth-mode login
     ```
 
     For example:
