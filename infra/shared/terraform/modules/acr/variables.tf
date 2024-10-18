@@ -31,7 +31,6 @@ variable "network_rules" {
       action   = string
       ip_range = string
     })), [])
-    #virtual_network_subnet_ids = optional(list(string))
   })
 
   default = null

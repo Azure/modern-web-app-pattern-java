@@ -12,7 +12,7 @@ module "acr" {
   location                   = var.location
   aca_identity_principal_id  = module.aca[0].identity_principal_id
   network_rules = {
-    default_action = "Allow"
+    default_action = "Deny"
     ip_rules = [
       {
         action   = "Allow"
@@ -36,7 +36,7 @@ module "dev_acr" {
   location                  = var.location
   aca_identity_principal_id = module.dev_aca[0].identity_principal_id
   network_rules = {
-    default_action = "Allow"
+    default_action = "Deny"
     ip_rules = [
       {
         action   = "Allow"
