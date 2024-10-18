@@ -31,6 +31,7 @@ variable "network_rules" {
       action   = string
       ip_range = string
     })), [])
+    #virtual_network_subnet_ids = optional(list(string))
   })
 
   default = null
@@ -43,14 +44,3 @@ variable "georeplications" {
   default = []
 }
 
-variable "private_endpoint_subnet_id" {
-  type        = string
-  description = "The ID of the subnet where the private endpoint should be created"
-  default     = null
-}
-
-variable "hub_vnet_id" {
-  type        = string
-  description = "The ID of the Spoke VNET"
-  default     = null
-}

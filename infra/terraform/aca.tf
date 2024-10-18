@@ -23,6 +23,7 @@ module "aca" {
 }
 
 
+
 # ----------------------------------------------------------------------------------------------
 #  Secondary Azure Container Apps - Prod - Secondary Region
 # ----------------------------------------------------------------------------------------------
@@ -32,7 +33,7 @@ module "secondary_aca" {
   resource_group                                 = azurerm_resource_group.secondary_spoke[0].name
   application_name                               = var.application_name
   environment                                    = var.environment
-  location                                       = var.location
+  location                                       = var.secondary_location
   email_request_queue_name                       = module.secondary_servicebus[0].queue_email_request_name
   email_response_queue_name                      = module.secondary_servicebus[0].queue_email_response_name
   servicebus_namespace                           = module.secondary_servicebus[0].namespace_name

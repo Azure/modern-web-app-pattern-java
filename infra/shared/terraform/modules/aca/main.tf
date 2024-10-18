@@ -39,7 +39,7 @@ resource "azurerm_container_app_environment" "container_app_environment_prod" {
   log_analytics_workspace_id = var.log_analytics_workspace_id
   zone_redundancy_enabled    = true
 
-  internal_load_balancer_enabled = var.isNetworkIsolated
+  internal_load_balancer_enabled = true
   infrastructure_subnet_id       = var.infrastructure_subnet_id
 
   workload_profile {
@@ -56,6 +56,7 @@ resource "azurerm_container_app" "container_app" {
   resource_group_name          = var.resource_group
   revision_mode                = "Single"
   workload_profile_name        = "Consumption"
+
   ingress {
     allow_insecure_connections = false
     external_enabled           = true
@@ -65,6 +66,7 @@ resource "azurerm_container_app" "container_app" {
       latest_revision = true
     }
   }
+
   tags = {
     "environment"      = var.environment
     "application-name" = var.application_name
@@ -138,20 +140,4 @@ resource "azurerm_container_app" "container_app" {
       }
     }
   }
-}
-
-# Create Private DNS Zone for Azure Container Apps in Prod if internal load balancer is enabled
-
-resource "azurerm_private_dns_zone" "dns_for_aca" {
-  count               = var.environment == "prod" && var.isNetworkIsolated ? 1 : 0
-  name                = var.environment == "prod" ? azurerm_container_app_environment.container_app_environment_prod[0].default_domain : azurerm_container_app_environment.container_app_environment_dev[0].default_domain
-  resource_group_name = var.resource_group
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link_aca" {
-  count                 = var.environment == "prod" && var.isNetworkIsolated ? 1 : 0
-  name                  = "privatelink.azurecr.io"
-  private_dns_zone_name = azurerm_private_dns_zone.dns_for_aca[0].name
-  virtual_network_id    = var.spoke_vnet_id
-  resource_group_name   = var.resource_group
 }

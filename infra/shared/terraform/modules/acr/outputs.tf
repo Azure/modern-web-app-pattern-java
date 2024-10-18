@@ -3,6 +3,11 @@ output "acr_name" {
   description = "The Azure Container Registry Name."
 }
 
+output "acr_id" {
+  value       = azurerm_container_registry.acr.id
+  description = "The Azure Container Registry ID."
+}
+
 output "acr_login_server" {
   value       = azurerm_container_registry.acr.login_server
   description = "The Azure Container Registry Login Server."
