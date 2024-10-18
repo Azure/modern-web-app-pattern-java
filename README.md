@@ -15,6 +15,50 @@ This repository contains a collection of patterns and best practices for buildin
 - [Maven 3.9.1](https://maven.apache.org/download.cgi)
 - [Protoc](https://grpc.io/docs/protoc-installation/)
 
+## Steps to deploy the reference implementation
+
+The following detailed deployment steps assume you are using a Dev Container inside Visual Studio Code.
+
+> For your convenience, we use Dev Containers with a fully-featured development environment. If you prefer to use another editor, we recommend installing the necessary [dependencies](./prerequisites.md) and skip to the deployment instructions starting in [Step 3](#3-log-in-to-azure).
+
+### 1. Clone the repo
+
+> For Windows users, we recommend using Windows Subsystem for Linux (WSL) to [improve Dev Container performance](https://code.visualstudio.com/remote/advancedcontainers/improve-performance).
+
+```pwsh
+wsl
+```
+
+Clone the repository and open the project using the Dev Container.
+
+```shell
+git clone https://github.com/Azure/modern-web-app-pattern-java
+
+cd modern-web-app-pattern-java
+```
+
+### 2. Open Dev Container in Visual Studio Code
+
+If required, ensure Docker Desktop is started. Open the repository folder in Visual Studio Code. You can do this from the command prompt:
+
+```shell
+code .
+```
+
+Once Visual Studio Code is launched, you should see a popup allowing you to click on the button **Reopen in Container**.
+
+![Reopen in Container](docs/assets/vscode-reopen-in-container.png)
+
+If you don't see the popup, open the Visual Studio Code Command Palette to execute the command. There are three ways to open the command palette:
+
+- For Mac users, use the keyboard shortcut ⇧⌘P
+- For Windows and Linux users, use Ctrl+Shift+P
+- From the Visual Studio Code top menu, navigate to View -> Command Palette.
+
+Once the command palette is open, search for `Dev Containers: Rebuild and Reopen in Container`.
+
+![WSL Ubuntu](docs/assets/vscode-reopen-in-container-command.png)
+
 ## Login to Azure
 
 Before deploying, you must be authenticated to Azure and have the appropriate subscription selected. Run the following command to authenticate:
