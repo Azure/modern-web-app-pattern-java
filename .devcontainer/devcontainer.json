@@ -1,5 +1,5 @@
 {
-	"name": "web-app-pattern-java",
+	"name": "modern-web-app-pattern-java",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
