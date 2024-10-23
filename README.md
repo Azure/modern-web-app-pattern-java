@@ -19,16 +19,6 @@ Contoso Fiber aligned to a hub and spoke network topology in the production depl
 
 ![Architecture](./docs/assets/diagrams/modern-web-app-java.svg)
 
-## Prerequisites
-
-- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-- [Azure Dev CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-mac)
-- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
-- [jq](https://stedolan.github.io/jq/download/)
-- [Java 17](https://adoptopenjdk.net/)
-- [Maven 3.9.1](https://maven.apache.org/download.cgi)
-- [Protoc](https://grpc.io/docs/protoc-installation/)
-
 ## Steps to deploy the reference implementation
 
 The following detailed deployment steps assume you are using a Dev Container inside Visual Studio Code.
@@ -73,7 +63,7 @@ Once the command palette is open, search for `Dev Containers: Rebuild and Reopen
 
 ![WSL Ubuntu](docs/assets/vscode-reopen-in-container-command.png)
 
-## Login to Azure
+### 3. Login to Azure
 
 Before deploying, you must be authenticated to Azure and have the appropriate subscription selected. Run the following command to authenticate:
 
@@ -109,7 +99,7 @@ If you have multiple tenants, you can use the following command to log into the 
 azd auth login --tenant-id <tenant-id>
 ```
 
-## Create a new environment
+### 4. Create a new environment
 
 Next we provide the AZD tool with variables that it uses to create the deployment. The first thing we initialize is the AZD environment with a name.
 
@@ -137,7 +127,7 @@ Optional: Set the App Registration Service management reference:
 azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <service_management_reference>
 ```
 
-## Build the applications
+### 5. Build the applications
 
 Run the following command to build the applications:
 
@@ -145,7 +135,7 @@ Run the following command to build the applications:
 ./mvnw clean install
 ```
 
-## Create the Azure resources and deploy the code
+### 6. Create the Azure resources and deploy the code
 
 Run the following command to create the Azure resources and deploy the code (about 15-minutes to complete):
 
@@ -153,7 +143,7 @@ Run the following command to create the Azure resources and deploy the code (abo
 azd up
 ```
 
-## Tear down the deployment
+### 7. Tear down the deployment
 
 Run the following command to tear down the deployment:
 
