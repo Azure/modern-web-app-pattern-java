@@ -173,8 +173,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 - [Developer Experience](developer-experience.md)
 - [Calculating SLA](sla-calculation.md)
 - [Find additional resources](additional-resources.md)
-- [Logging](docs/logging.md)
-- [Redis](docs/REDIS.md)
 - [Report security concerns](SECURITY.md)
 - [Find Support](SUPPORT.md)
 - [Contributing](CONTRIBUTING.md)
