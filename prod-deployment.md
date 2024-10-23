@@ -2,7 +2,7 @@
 
 This section describes the deployment steps for the reference implementation of a modern web application pattern with Java on Microsoft Azure. These steps guide you through using the jump box that is deployed when performing a network isolated deployment because access to resources will be restricted from public network access and must be performed from a machine connected to the vnet.
 
-![TODO: Diagram showing the network focused architecture of the reference implementation.](./docs/icons/modern-web-app-vnet.svg)
+![TODO: Diagram showing the network focused architecture of the reference implementation.](./docs/assets/diagrams/modern-web-app-java.svg)
 
 ## Prerequisites
 
@@ -151,7 +151,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     ./mvnw clean install
     ```
 
-    This will create the jar file `cams.jar` in the `src/contoso-fiber/target/` directory. This file will be used to deploy the application to Azure App Service.
+    This will create the jar file `cams.jar` in the `apps/contoso-fiber/target/` directory and `email-processor.jar` in the `apps/email-processor/target/` directory. The `cams.jar` file will be included in a Docker image and uploaded to Azure Container Registry.
 
 ### 5. Build the Email Processor Docker image
 
@@ -160,6 +160,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
 
     ```shell
     target_image=modern-java-web/email-processor:1.0.0
+    
     docker build -f apps/email-processor/Dockerfile -t $target_image ./apps/email-processor/
     ```
 
@@ -167,6 +168,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
 
     ```shell
     target_image_file=modern-java-web-email-processor-1.0.0.tar
+    
     docker save -o $target_image_file $target_image
     ```
 
@@ -174,7 +176,9 @@ The following detailed deployment steps assume you are using a Dev Container ins
 
     ```shell
     container_registry=$(azd env get-values --output json | jq -r .AZURE_CONTAINER_REGISTRY_ENDPOINT)
+    
     primary_resource_group=$(azd env get-values --output json | jq -r .primary_spoke_resource_group)
+    
     secondary_resource_group=$(azd env get-values --output json | jq -r .secondary_spoke_resource_group)
     ```
 
@@ -192,7 +196,9 @@ The following detailed deployment steps assume you are using a Dev Container ins
 
     ```sh
     bastion_host_name=$(azd env get-values --output json | jq -r .bastion_host_name)
+    
     hub_resource_group=$(azd env get-values --output json | jq -r .hub_resource_group)
+    
     jumpbox_resource_id=$(azd env get-values --output json | jq -r .jumpbox_resource_id)
     ```
 
@@ -288,6 +294,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
 
     ```shell
     az appconfig kv list -n appcg-nickd13mwa-eastus2-prod --auth-mode login
+    
     az appconfig kv list -n appcg-nickd13mwa-canadacentral-prod --auth-mode login
     ```
 
