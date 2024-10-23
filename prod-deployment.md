@@ -415,14 +415,14 @@ az webapp connection create postgres-flexible \
     ```
 
 
-### 13. View the APP
+### 12. View the APP
 
 1. Navigate to the Front Door URL in a browser to view the Contoso Fiber CAMS application.
 
     > You can learn more about the web app by reading the [Pattern Simulations](demo.md) documentation.
 
 
-### 14. Teardown
+### 13. Teardown
 
 1. Exit the jumpbox using:
 
