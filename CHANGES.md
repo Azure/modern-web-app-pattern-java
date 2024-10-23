@@ -1,0 +1,15 @@
+# Modern web app pattern for Java changes
+
+The reference sample in this repository builds on the previous [Reliable Web App Pattern for Java](https://aka.ms/eap/rwa/java). Whereas the Reliable Web App Pattern focused on re-platforming an existing web app into Azure App Service with minimal code changes while still realizing benefits of cloud deployment, the Modern Web App Pattern focuses on modernizing the web app to more fully take advantage of cloud-native features and services.
+
+As part of the modernization of the pattern, several changes have been made to the sample source code and the Azure services used.
+
+## New services
+
+* **Azure Container Apps** - The Modern Web App Pattern reference sample uses Azure Container Apps to host a new email processing service that was separated from the web API as part of applying the [strangler fig pattern](https://learn.microsoft.com/azure/architecture/patterns/strangler-fig). Azure Container Apps is a fully managed serverless platform for running containerized apps. The reference sample uses Azure Container Apps because it provides managed container orchestration with support for automatic scale-in and scale-out based on a wide variety of rules using [KEDA](https://keda.sh/docs/2.13/) scalers. This allows the email processing service to automatically scale to zero when there is no work to be done and automatically scale up, as needed, based on the number of messages in the Service Bus queue.
+
+* **Azure Container Registry** - Because the Modern Web App Pattern reference sample uses Azure Container Apps, it also uses Azure Container Registry to store the container images for the email processing service. Azure Container Registry is a managed, private Docker registry service that stores and manages container images for all types of container deployments. Azure Container Registry supports the reference sample's SLO goals by being highly available thanks to its [geo-replication](https://learn.microsoft.com/azure/container-registry/container-registry-geo-replication#configure-geo-replication) feature.
+
+* **Azure Service Bus** - The Modern Web App Pattern reference sample uses Azure Service Bus to enable message-based communication between the CAMS Application and the new email processing service. Using message-based communication allows improved reliability and performance by decoupling the CAMS application from the email processing service. Applying a queue-based load leveling pattern means that neither the CAMS application nor the email processing service will be affected by large numbers of email requests. The reference sample uses Azure Service Bus because it provides a fully managed, reliable, and secure messaging service that supports the reference sample's SLO goals.
+
+* **Azure App Configuration Feature Manager** - The Modern Web App Pattern uses Azure App Configuration to store the CAMS application settings. Azure App Configuration is a managed service that provides a central place to manage application settings and feature flags.
