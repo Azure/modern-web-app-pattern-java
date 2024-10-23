@@ -129,7 +129,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
 
 ### 3. Configure App Config
 
-1. Open the terraform.tfvars file in the `infra/terraform-appconfig` folder and provide the correct values for the the following:
+1. Open the `terraform.tfvars` file in the `infra/terraform-appconfig` folder and provide the correct values for the the following:
 
     * primary_app_config_id
     * secondary_app_config_id
@@ -151,7 +151,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     ./mvnw clean install
     ```
 
-    This will create the jar file `cams.jar` in the `apps/contoso-fiber/target/` directory and `email-processor.jar` in the `apps/email-processor/target/` directory. The `cams.jar` file will be included in a Docker image and uploaded to Azure Container Registry.
+    This will create the jar file `cams.jar` in the `apps/contoso-fiber/target/` directory and `email-processor.jar` in the `apps/email-processor/target/` directory. The `cams.jar` will be used to deploy the application to Azure App Service. The `email-processor.jar` file will be included in a Docker image and uploaded to Azure Container Registry.
 
 ### 5. Build the Email Processor Docker image
 
@@ -421,6 +421,11 @@ az webapp connection create postgres-flexible \
 
     > You can learn more about the web app by reading the [Pattern Simulations](demo.md) documentation.
 
+To get the Front Door URL, run the following command:
+
+```shell
+azd env get-values --output json | jq -r .frontdoor_url
+```
 
 ### 13. Teardown
 
