@@ -161,7 +161,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     ```shell
     target_image=modern-java-web/email-processor:1.0.0
     
-    docker build -f apps/email-processor/Dockerfile -t $target_image ./apps/email-processor/
+    docker build --platform linux/amd64 -f apps/email-processor/Dockerfile -t $target_image --platform linux/amd64 ./apps/email-processor/
     ```
 
 1. Save the docker image to a file
