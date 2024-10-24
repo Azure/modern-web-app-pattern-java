@@ -157,6 +157,16 @@ output "secondary_app_config_keys" {
   description = "The secondary app config keys."
 }
 
+output "primary_app_config_name" {
+  value = var.environment == "prod" ? module.azconfig[0].azconfig_name : null
+  description = "The app config name in the primary spoke."
+}
+
+output "secondary_app_config_name" {
+  value = var.environment == "prod" ? module.secondary_azconfig[0].azconfig_name : null
+  description = "The app config name in the secondary spoke."
+}
+
 output "primary_app_config_id" {
   value = var.environment == "prod" ? module.azconfig[0].azconfig_id : module.dev_azconfig[0].azconfig_id
   description = "The app config ID."

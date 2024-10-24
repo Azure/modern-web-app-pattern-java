@@ -197,7 +197,7 @@ resource "azurerm_private_dns_zone" "dns_for_acr" {
 
 resource "azurerm_private_dns_zone_virtual_network_link" "spoke_azurecr_virtual_network_link" {
   count                 = var.environment == "prod" ? 1 : 0
-  name                  = "hub-private-link-acr"
+  name                  = "spoke-azurecr-link"
   private_dns_zone_name = azurerm_private_dns_zone.dns_for_acr[0].name
   virtual_network_id    = module.spoke_vnet[0].vnet_id
   resource_group_name   = azurerm_resource_group.hub[0].name
