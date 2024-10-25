@@ -1,7 +1,5 @@
 # Prerequisites
 
- If you want to use a VSCode DevContainer see the `VSCode DevContainer prerequisites` section below
-
 The project has the following prerequisites:
 
 1. [Java 17](https://learn.microsoft.com//java/openjdk/download)
@@ -11,6 +9,8 @@ The project has the following prerequisites:
 1. [Terraform 1.9.8](https://developer.hashicorp.com/terraform/downloads)
 1. [JQ 1.6](https://jqlang.github.io/jq/download/)
 1. [protoc 3.12.4](https://grpc.io/docs/protoc-installation/)
+
+ If you want to use a VSCode DevContainer see the `VSCode DevContainer prerequisites` section below.
 
 ## Platform compatibility
 
