@@ -29,7 +29,7 @@ variable "primary_app_config_keys" {
   description = "The keys to create in the App Configuration"
 }
 
-variable "seconday_app_config_keys" {
+variable "secondary_app_config_keys" {
   type = list(object({
     key                 = string
     content_type        = optional(string)
