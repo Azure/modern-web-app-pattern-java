@@ -314,21 +314,21 @@ In order to deploy the application, you need to set up the deployment environmen
 
 We will now configure the Contoso Fiber application to use Microsoft Entra authentication with Azure Database for PostgreSQL - Flexible Server. For more information, see [Tutorial: Create a passwordless connection to a database service via Service Connector](https://learn.microsoft.com/azure/service-connector/tutorial-passwordless?tabs=user%2Cjava%2Csql-me-id-dotnet%2Cappservice&pivots=postgresql)
 
-Run the following command to install the serviceconnector-passwordless extension:
+1. Run the following command to install the serviceconnector-passwordless extension:
 
-```
-az extension add --name serviceconnector-passwordless --upgrade
-```
+    ```
+    az extension add --name serviceconnector-passwordless --upgrade
+    ```
 
-Run the following commands to configure the application:
+3. Run the following commands to configure the application:
 
-```
-az webapp connection create postgres-flexible \
-    --source-id $primary_app_service_id \
-    --target-id $primary_database_id \
-    --client-type springBoot \
-    --system-identity
-```
+    ```
+    az webapp connection create postgres-flexible \
+        --source-id $primary_app_service_id \
+        --target-id $primary_database_id \
+        --client-type springBoot \
+        --system-identity
+    ```
 
 ### 11. Deploy code from the jump box
 
