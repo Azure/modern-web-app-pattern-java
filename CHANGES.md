@@ -1,8 +1,15 @@
-# Modern web app pattern for Java changes
+# Modernization Journey of Contoso Fiber's CAMS Web App
 
-The reference sample in this repository builds on the previous [Reliable Web App Pattern for Java](https://aka.ms/eap/rwa/java). Whereas the Reliable Web App Pattern focused on re-platforming an existing web app into Azure App Service with minimal code changes while still realizing benefits of cloud deployment, the Modern Web App Pattern focuses on modernizing the web app to more fully take advantage of cloud-native features and services.
+After migrating their Customer Account Management System (CAMS) to Azure, Contoso Fiber achieved their initial goals: a 99.9% SLO, optimized costs, and expanded reach. However, they recognized that leveraging Azure's cloud-native services would further improve agility, reliability, and scalability
 
-As part of the modernization of the pattern, several changes have been made to the sample source code and the Azure services used.
+## Modern Web App pattern for Java
+Building on the prior [Reliable Web App pattern for Java](https://aka.ms/eap/rwa/java), which re-platformed CAMS in Azure with minimal code changes, Contoso now focuses on a Modern Web App Pattern to better utilize cloud-native capabilities. This phase involves:
+
+- Refactoring the Monolith: By using the strangler-fig pattern, Contoso is gradually transforming the monolithic CAMS into modular components, enhancing scalability.
+- Applying Queue-Based Load Leveling: This pattern optimizes performance by buffering external dependencies like email services, reducing load peaks.
+- Improving Security and Reliability: Isolating services allows Contoso to better secure components and contain any potential failures.
+
+This modernization lays a cloud-native foundation for CAMS, positioning Contoso Fiber for sustainable growth and adaptability.
 
 ## New services
 
