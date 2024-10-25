@@ -54,3 +54,7 @@ application-dev.properties
 # Azure CLI configuration
 az_ssh_config/
 ssh-config
+
+# CAMS artifacts
+modern-java-web-email-processor-*.tar
+deployment-env
