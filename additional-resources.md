@@ -1,6 +1,8 @@
 # Starting your modernization journey
 
-In this guide we provided the content to build a web app based on other resources such as the Azure Architecture Center. In this section we'll highlight those source materials that you can use to learn more about Azure and modernization.
+In this guide, we've shared how Contoso Fiber modernized their Customer Account Management System (CAMS) by leveraging Azure's cloud-native capabilities, addressing scalability, reliability, and cost optimization. Contoso made these changes to break free from limitations of their monolithic setup, allowing for easier scaling and more efficient handling of fluctuating demand. These strategies, drawn from Azure resources and best practices, illustrate a modernization path that other businesses can follow to achieve similar benefits.
+
+This section highlights those key resources, providing a deeper dive into Azure’s architecture and modernization techniques that empower other projects to succeed with cloud-native solutions.
 
 ## Additional sources for Azure Best Practices
 
