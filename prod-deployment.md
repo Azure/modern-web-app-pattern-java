@@ -2,7 +2,7 @@
 
 This section describes the deployment steps for the reference implementation of a modern web application pattern with Java on Microsoft Azure. These steps guide you through using the jump box that is deployed when performing a network isolated deployment because access to resources will be restricted from public network access and must be performed from a machine connected to the vnet.
 
-![TODO: Diagram showing the network focused architecture of the reference implementation.](./docs/assets/diagrams/modern-web-app-java.svg)
+![Diagram showing the network focused architecture of the reference implementation.](./docs/assets/diagrams/modern-web-app-java.svg)
 
 ## Prerequisites
 
