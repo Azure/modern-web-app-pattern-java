@@ -27,7 +27,7 @@ resource "azurerm_app_configuration_key" "primary_keys" {
 }
 
 resource "azurerm_app_configuration_key" "secondary_keys" {
-  for_each               = var.seconday_app_config_keys != null ? { for idx, key in var.seconday_app_config_keys : idx => key } : {}
+  for_each               = var.secondary_app_config_keys != null ? { for idx, key in var.secondary_app_config_keys : idx => key } : {}
   configuration_store_id = var.secondary_app_config_id
   key                    = each.value.key
   type                   = each.value.type

@@ -43,7 +43,7 @@ variable "secondary_app_config_keys" {
 
   validation {
     condition = alltrue([
-      for k in var.seconday_app_config_keys :
+      for k in var.secondary_app_config_keys :
       (k.type == "kv" && k.value != null) || (k.type == "vault" && k.vault_key_reference != null)
     ])
     error_message = "Type must be kv or vault. If vault, vault_key_reference must be set. If kv, value must be set."
