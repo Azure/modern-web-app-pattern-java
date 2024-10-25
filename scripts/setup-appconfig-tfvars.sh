@@ -16,5 +16,5 @@ echo "------------------------------"
 
 echo "primary_app_config_id = \"$primary_app_config_id\"" > $TERRAFORM_VARS_FILE
 echo "secondary_app_config_id = \"$secondary_app_config_id\"" >> $TERRAFORM_VARS_FILE
-echo "primary_app_config_keys = $(echo $primary_app_config_keys)" >> $TERRAFORM_VARS_FILE
-echo "secondary_app_config_keys = $(echo $secondary_app_config_keys)" >> $TERRAFORM_VARS_FILE
+echo "primary_app_config_keys = ${primary_app_config_keys}" >> $TERRAFORM_VARS_FILE
+echo "secondary_app_config_keys = ${secondary_app_config_keys}" >> $TERRAFORM_VARS_FILE
