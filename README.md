@@ -4,7 +4,7 @@
 
 This repository contains a collection of patterns and best practices for building modern Java web applications. The patterns are designed to be used with the [Spring Framework](https://spring.io/) and [Azure](https://azure.microsoft.com/), but can be adapted to other frameworks and cloud providers. 
 
-This project has [a companion article in the Azure Architecture Center](TODO:) that describes design patterns and best practices. Here's an outline of the contents in this readme:
+This project has [a companion article in the Azure Architecture Center](https://aka.ms/eap/mwa/java/doc) that describes design patterns and best practices. Here's an outline of the contents in this readme:
 
 - [Architecture](#architecture)
 - [Workflow](#workflow)
