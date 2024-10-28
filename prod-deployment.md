@@ -338,10 +338,12 @@ We will now configure the Contoso Fiber application to use Microsoft Entra authe
     az webapp deploy --resource-group $primary_spoke_resource_group --name $primary_app_service_name --src-path cams.jar --type jar
     ```
 
-1. Deploy the application to the secondary region using:
+1. Deploy the application to the secondary region using the following command. 
+
+    This step is optional and can be done at a later time. There is a known issue with the deployment of the secondary region. See [known_issues](./known-issues.md) for more information.
 
     ```shell
-    az webapp deploy --resource-group $secondary_spoke_resource_group --name $secondary_app_service_name --src-path cams.jar --type jar --restart false --async true
+    az webapp deploy --resource-group $secondary_spoke_resource_group --name $secondary_app_service_name --src-path cams.jar --type jar --restart false
     ```
 
     The `--restart false` flag is used to prevent the app from restarting after deployment. This is because the app is not yet configured to use the database as the secondary region is on stand by.
@@ -426,6 +428,24 @@ We will now configure the Contoso Fiber application to use Microsoft Entra authe
     ```
 
 1. Update the container app with the email processor image
+
+    ```shell
+    az containerapp update -n email-processor -g $primary_spoke_resource_group --image $email_processor_image
+
+    az containerapp update -n email-processor -g $secondary_spoke_resource_group --image $email_processor_image
+    ```
+
+    Ensure that the image is updated in the container app.
+
+    ```shell
+    az containerapp show -n email-processor -g $primary_spoke_resource_group --query "properties.template.containers[0].image" -o tsv
+    ```
+
+    ```shell
+    az containerapp show -n email-processor -g $secondary_spoke_resource_group --query "properties.template.containers[0].image" -o tsv
+    ```
+
+    If the image is not updated, issue the update command again.
 
     ```shell
     az containerapp update -n email-processor -g $primary_spoke_resource_group --image $email_processor_image
