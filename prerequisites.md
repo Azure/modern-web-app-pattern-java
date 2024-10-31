@@ -17,6 +17,7 @@ The project has the following prerequisites:
 
 |             |  Native   | DevContainer |
 |-------------|-----------|--------------|
+| Windows     |    ❌     |      ❌      |
 | Windows WSL |    ✅     |      ✅      |
 | macOS       |    ✅     |      ✅      |
 | macOS arm64 |    ✅     |      ✅      |

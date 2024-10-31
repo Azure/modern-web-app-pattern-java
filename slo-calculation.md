@@ -46,7 +46,7 @@ When operating in production, network isolation is used.  We do not consider the
 | - Private Link        | 99.990%   |
 | Azure Cache for Redis | 99.900%   |
 | - Private Link        | 99.990%   |
-Azure Postgres Flexible Server             | 99.990%   |
+|Azure Postgres Flexible Server | 99.990%   |
 | - Private Link        | 99.990%   |
 | Azure Storage         | 99.900%   |
 | - Private Link        | 99.990%   |
