@@ -11,7 +11,7 @@ Verify that you are in the directory where the `azure.yaml` file is located. You
 ## BadRequest: Azure subscription is not registered with CDN Provider.
 This error message surfaces from the `azd provision` command when trying to follow the guide to provision an Azure Front Door.
 
-Most [Azure resource providers](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider) are registered automatically by the Microsoft Azure portal or the command-line interface, but not all. If you haven't used a particular resource provider before, you might need to register that provider.
+Most [Azure resource providers](https://learn.microsoft.com/azure/azure-resource-manager/troubleshooting/error-register-resource-provider) are registered automatically by the Microsoft Azure portal or the command-line interface, but not all. If you haven't used a particular resource provider before, you might need to register that provider.
 
 **Full error message**
 ```

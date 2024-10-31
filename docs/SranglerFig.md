@@ -34,4 +34,4 @@ The `CONTOSO_SUPPORT_GUIDE_REQUEST_SERVICE` environment variable changes the beh
 
 ## Additional Resources
 
-[Strangler Fig Pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/strangler-fig) documentation.
+[Strangler Fig Pattern](https://docs.microsoft.com/azure/architecture/patterns/strangler-fig) documentation.

@@ -77,7 +77,7 @@ If you have multiple tenants, you can use the following command to log into the 
 az login --tenant <tenant-id>
 ```
 
-Set the subscription to the one you want to use (you can use [az account list](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list) to list available subscriptions):
+Set the subscription to the one you want to use (you can use [az account list](https://learn.microsoft.com/cli/azure/account?view=azure-cli-latest#az-account-list) to list available subscriptions):
 
 ```shell
 export AZURE_SUBSCRIPTION_ID="<your-subscription-id>"
@@ -171,7 +171,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 - [Troubleshooting](troubleshooting.md)
 - [Pattern Simulations](demo.md)
 - [Developer Experience](developer-experience.md)
-- [Calculating SLA](sla-calculation.md)
+- [Calculating SLA](slo-calculation.md)
 - [Find additional resources](additional-resources.md)
 - [Report security concerns](SECURITY.md)
 - [Find Support](SUPPORT.md)
@@ -181,7 +181,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
 trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
 

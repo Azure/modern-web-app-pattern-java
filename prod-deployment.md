@@ -39,7 +39,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     az login --tenant <tenant-id>
     ```
 
-1. Set the subscription to the one you want to use (you can use [az account list](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest) to list available subscriptions):
+1. Set the subscription to the one you want to use (you can use [az account list](https://learn.microsoft.com/cli/azure/account?view=azure-cli-latest) to list available subscriptions):
 
 
     ```sh
@@ -82,7 +82,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     azd env set ENVIRONMENT prod
     ```
 
-1. Production is a multi-region deployment. Choose an Azure region for the primary deployment (Run [az account list-locations --query '[].{Location: name}'](https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest) to see a list of locations):
+1. Production is a multi-region deployment. Choose an Azure region for the primary deployment (Run [az account list-locations --query '[].{Location: name}'](https://learn.microsoft.com/cli/azure/account?view=azure-cli-latest) to see a list of locations):
 
     ```pwsh
     azd env set AZURE_LOCATION <pick_a_region>
@@ -96,7 +96,7 @@ The following detailed deployment steps assume you are using a Dev Container ins
     azd env set AZURE_SECONDARY_LOCATION <pick_a_region>
     ```
 
-    *We encourage readers to choose paired regions for multi-regional web apps. Paired regions typically offer low network latency, data residency in the same geography, and sequential updating. Read [Azure paired regions](https://learn.microsoft.com/en-us/azure/reliability/cross-region-replication-azure#azure-paired-regions) to learn more about these regions.*
+    *We encourage readers to choose paired regions for multi-regional web apps. Paired regions typically offer low network latency, data residency in the same geography, and sequential updating. Read [Azure paired regions](https://learn.microsoft.com/azure/reliability/cross-region-replication-azure#azure-paired-regions) to learn more about these regions.*
 
 1. Optional: Set the App Registration Service Management Reference:
 
@@ -202,7 +202,7 @@ In order to deploy the application, you need to set up the deployment environmen
     echo $jumpbox_resource_id
     ```
 
-1. We use the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/) to create a bastion tunnel that allows us to connect to the jump box. Run the following command to create a bastion tunnel to the jump box:
+1. We use the [Azure CLI](https://learn.microsoft.com/cli/azure/) to create a bastion tunnel that allows us to connect to the jump box. Run the following command to create a bastion tunnel to the jump box:
 
     ```sh
     az network bastion tunnel --name $bastion_host_name --resource-group $hub_resource_group --target-resource-id $jumpbox_resource_id --resource-port 22 --port 50022
