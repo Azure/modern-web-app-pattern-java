@@ -143,6 +143,16 @@ Run the following command to create the Azure resources and deploy the code (abo
 azd up
 ```
 
+Navigate to the URL provided in the output for the service application.
+
+![Deployment URL](./docs/assets/application-url.png)
+
+Run the following command to get the CAMS URL:
+
+```shell
+azd env get-values --output json | jq -r .dev_frontdoor_url
+```
+
 ### 7. Tear down the deployment
 
 Run the following command to tear down the deployment:
