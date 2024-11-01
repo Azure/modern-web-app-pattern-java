@@ -8,7 +8,6 @@ The project has the following prerequisites:
 1. [Azure Dev CLI 1.10.1](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)
 1. [Terraform 1.9.8](https://developer.hashicorp.com/terraform/downloads)
 1. [JQ 1.6](https://jqlang.github.io/jq/download/)
-1. [protoc 3.12.4](https://grpc.io/docs/protoc-installation/)
 1. [Docker](https://docs.docker.com/get-docker/)
 
  If you want to use a VSCode DevContainer see the `VSCode DevContainer prerequisites` section below.
