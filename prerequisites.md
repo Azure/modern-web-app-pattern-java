@@ -21,6 +21,16 @@ The project has the following prerequisites:
 | macOS       |    ✅     |      ✅      |
 | macOS arm64 |    ✅     |      ✅      |
 
+## Azure CLI Extensions
+
+### Azure Service Connector Passwordless extension
+
+Install the [service connector extension](https://learn.microsoft.com/azure/service-connector/tutorial-passwordless?tabs=user%2Cdotnet%2Csql-me-id-dotnet%2Cappservice&pivots=postgresql#install-the-service-connector-passwordless-extension).
+
+```shell
+az extension add --name serviceconnector-passwordless --upgrade
+```
+
 ## Recommended VSCode extensions
 
 If you are using VSCode, please install the following extensions:
