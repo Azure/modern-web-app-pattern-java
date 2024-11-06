@@ -170,7 +170,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 - [Known issues](known-issues.md)
 - [Troubleshooting](troubleshooting.md)
 - [Pattern Simulations](demo.md)
-- [Developer Experience](developer-experience.md)
 - [Calculating SLA](slo-calculation.md)
 - [Find additional resources](additional-resources.md)
 - [Report security concerns](SECURITY.md)
